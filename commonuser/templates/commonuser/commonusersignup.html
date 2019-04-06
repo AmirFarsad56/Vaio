@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+    <div class="container">
+        <div class="jumbotron">
+            {% if registered %}
+            <h1>Thank you for registering!</h1>
+            <p>please <a href="{% url 'login' %}">login</a></p>
+
+            {% else %}
+            <h1>Register Here</h1>
+            <h3>Just fill out the form.</h3>
+            <form enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+                {{ user_form.as_p }}
+
+                {{ commonuser_form.as_p }}
+
+                <script src='https://www.google.com/recaptcha/api.js'></script>
+                <div class="g-recaptcha" data-sitekey="6LfbM5oUAAAAAIin3dtuLQB95QITpdUK09tsZ9Ku"></div>
+                <input type="submit" value="Register">
+            </form>
+            {% if user.is_authenticated %}
+            Welcome {{user.username}}
+            {% endif %}
+            {% endif %}
+
+
+        </div>
+    </div>
+
+</body>
+</html>

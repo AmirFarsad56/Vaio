@@ -1,0 +1,12 @@
+google recaptcha redeploy for new domain
+coding the secret keys
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # During development only
+
+Modules
+	password hashers
+		pip install bcrypt
+		pip install django[argon2]
+	pillow
+		pip install pillow
+
+	

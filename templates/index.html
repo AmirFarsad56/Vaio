@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+    {% if user.is_registered %}
+    <p> <a href="{% url 'logout' %}">logout</a></p>
+    {% else %}
+    <p>welcome {{user.username}}</p>
+    <p> please login from <a href="{% url 'login' %}">here</a></p>
+    <p>or sign up commonuser from <a href="{% url 'commonuser:signup' %}">here</a></p>
+
+    {% endif %}
+
+
+</body>
+</html>

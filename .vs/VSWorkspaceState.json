@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\accounts",
+    "\\accounts\\templates",
+    "\\accounts\\templates\\accounts",
+    "\\commonuser",
+    "\\commonuser\\templates",
+    "\\commonuser\\templates\\commonuser",
+    "\\Main_Project",
+    "\\templates",
+    "\\templates\\registration"
+  ],
+  "SelectedNode": "\\commonuser\\urls.py",
+  "PreviewInSolutionExplorer": false
+}
