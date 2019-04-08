@@ -7,12 +7,23 @@
 </head>
 <body>
 
-    {% if user.is_registered %}
+    {% if user.is_authenticated %}
+    <p>welcome {{user.username}}</p>
+    {% if user.is_sportclub %}
+    <a href="{% url 'sportclub:profile' pk=user.sportclubs.pk %}">Profile Page</a>
+    {% endif %}
+
+    {% if user.is_commonuser %}
+    <a href="{% url 'commonuser:profile' pk=user.commonusers.pk %}">Profile Page</a>
+    {% endif %}
+
     <p> <a href="{% url 'logout' %}">logout</a></p>
     {% else %}
-    <p>welcome {{user.username}}</p>
+
     <p> please login from <a href="{% url 'login' %}">here</a></p>
     <p>or sign up commonuser from <a href="{% url 'commonuser:signup' %}">here</a></p>
+    <p>or signup a sportclub via <a href="{% url 'sportclub:signup' %}">here</a></p>
+
 
     {% endif %}
 

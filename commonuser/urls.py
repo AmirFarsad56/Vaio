@@ -1,8 +1,9 @@
 from django.urls import include, path
-from commonuser.views import CommonUserSignupView,CommonUserListView
+from commonuser.views import CommonUserSignupView, CommonUserProfileView
 
 app_name ='commonuser'
 urlpatterns = [
-    path('accounts/signup/', CommonUserSignupView, name='signup'),
-    path('accounts/list/', CommonUserListView.as_view())
+    path('commonuser/signup/', CommonUserSignupView, name='signup'),
+    path('commonuser/profile/<int:pk>/',CommonUserProfileView.as_view(),
+         name = 'profile'),
 ]

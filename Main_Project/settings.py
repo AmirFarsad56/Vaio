@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'accounts',
     'commonuser',
     'sportclub',
+    'salon',
 ]
 
 AUTH_USER_MODEL = 'accounts.UserModel'

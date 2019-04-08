@@ -1,3 +1,4 @@
 from django.contrib import admin
+from sportclub.models import SportClubModel
 
-# Register your models here.
+admin.site.register(SportClubModel)

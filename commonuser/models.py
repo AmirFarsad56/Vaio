@@ -10,7 +10,7 @@ class CommonUserModel(models.Model):
     picture = models.ImageField(default = r'commonuser/default/coverpicture/default_profile_pic.jpg',
                                  upload_to=r'commonuser/coverpicture')
     #booked_times = models.ForeignKey()
-
+    #interests
 
     def __str__(self):
         return self.user.username

@@ -2,15 +2,16 @@
   "ExpandedNodes": [
     "",
     "\\accounts",
-    "\\accounts\\templates",
-    "\\accounts\\templates\\accounts",
     "\\commonuser",
     "\\commonuser\\templates",
-    "\\commonuser\\templates\\commonuser",
     "\\Main_Project",
-    "\\templates",
-    "\\templates\\registration"
+    "\\media",
+    "\\media\\sportlub",
+    "\\media\\sportlub\\default",
+    "\\sportclub",
+    "\\sportclub\\templates",
+    "\\sportclub\\templates\\sportclub"
   ],
-  "SelectedNode": "\\commonuser\\urls.py",
+  "SelectedNode": "\\sportclub\\models.py",
   "PreviewInSolutionExplorer": false
 }

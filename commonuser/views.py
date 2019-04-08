@@ -1,6 +1,8 @@
 
 from django.shortcuts import render, redirect
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
+
+#handmade classes
 from commonuser.forms import CommonUserForm
 from accounts.forms import UserForm
 from commonuser.models import CommonUserModel
@@ -55,7 +57,7 @@ def CommonUserSignupView(request):
             # One of the forms was invalid if this else gets called.
             #redirect to another page or anything else
             print(user_form.errors,commonuser_form.errors)
-                          
+
 
     else:
         user_form = UserForm()
@@ -66,8 +68,7 @@ def CommonUserSignupView(request):
                            'commonuser_form':commonuser_form,
                            'registered':registered})
 
-class CommonUserListView(ListView):
-    template_name = 'commonuser/commonuserlist.html'
-    context_object_name = 'users'
-    model = UserModel
-
+class CommonUserProfileView(DetailView):
+    model = CommonUserModel
+    context_object_name = 'commonuser_detail'
+    template_name = 'commonuser/commonuserprofile.html'

@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from accounts.models import UserModel
 from accounts.forms import UserForm
 from commonuser.models import CommonUserModel
+from sportclub.models import SportClubModel
 
 
 class CommonUserInline(admin.StackedInline):
@@ -10,6 +11,14 @@ class CommonUserInline(admin.StackedInline):
     can_delete = False
     verbose_name_plural = 'CommonUser'
     fk_name = 'user'
+
+
+class SportClubInline(admin.StackedInline):
+    model = SportClubModel
+    can_delete = False
+    verbose_name_plural = 'SportClub'
+    fk_name = 'user'
+
 
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
@@ -29,11 +38,9 @@ class UserAdmin(BaseUserAdmin):
 
     search_fields = ('username','email',)
     ordering = ('-date_joined',)
-    #Registering the CommonUserModel
-    inlines = [CommonUserInline,]
+    #Registering the CommonUserModel & SportClubModel
+    inlines = [CommonUserInline,SportClubInline,]
 
 
 #registering the model
 admin.site.register(UserModel,UserAdmin)
-
-
