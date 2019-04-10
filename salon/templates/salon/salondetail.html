@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <p>this is the details of the salon:</p>
+    <p>
+    Area: {{salon_detail.area}}<br>
+    Floor Type{{salon_detail.floor_type}}<br>
+    Locker: {{salon_detail.locker}}<br>
+    Shower: {{salon_detail.shower}}<br>
+    Changing Room: {{salon_detail.changing_room}}<br>
+    </p>
+    {% for pic in salon_detail.pictures.all %}
+    <p>Salon image: </p><img src="{{pic.picture.url}}" width="50" height="50"/><br>
+    {% endfor %}
+  </body>
+</html>

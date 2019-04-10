@@ -6,13 +6,15 @@
   </head>
   <body>
     <p>this is the detail view for the commonuser page</p><br>
-    {{ commonuser_detail.user.username }}<br>
-    {{ commonuser_detail.user.email }}<br>
-    {{ commonuser_detail.first_name }}</br>
-    {{ commonuser_detail.last_name }}<br>
-    {{ commonuser_detail.phone_number }}<br>
+    <p>
+    username: {{ commonuser_detail.user.username }}<br>
+    email: {{ commonuser_detail.user.email }}<br>
+    first name: {{ commonuser_detail.first_name }}</br>
+    last_name: {{ commonuser_detail.last_name }}<br>
+    phone number: {{ commonuser_detail.phone_number }}<br>
+    profile image <img src="{{commonuser_detail.picture.url}}" />
+    </p>
 
-    <!-- picture url -->
 
   </body>
 </html>

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView
+from django.utils.text import slugify
 
 #handmade classes
 from sportclub.forms import SportClubForm
@@ -44,6 +45,7 @@ def SportClubSignupView(request):
                      user.save()
                      sportclub = sportclub_form.save(commit=False)
                      sportclub.user = user
+                     sportclub.slug = slugify(user.username)
                      #not dealing well with picture
                      if 'picture' in request.FILES:
                         sportclub.picture = request.FILES['picture']

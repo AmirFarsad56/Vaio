@@ -1,3 +1,5 @@
 from django.contrib import admin
+from salon.models import SalonModel, SalonPictureModel
 
-# Register your models here.
+admin.site.register(SalonModel)
+admin.site.register(SalonPictureModel)

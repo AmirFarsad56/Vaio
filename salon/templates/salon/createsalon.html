@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    {% if pending %}
+    <form enctype="multipart/form-data" method="POST">
+      {% csrf_token %}
+      {{salon_form.as_p}}
+      {{formsets.management_form}}
+      {% for formset in formsets %}
+        {{ formset }}
+      {% endfor %}
+
+      <input type="submit" value="Submit">
+    {% else %}
+    <p>add another salon?</p>
+    <a href="{% url 'sportclub:salon:createsalon' slug=user.sportclubs.slug %}">Yes</a>
+    <br>
+    <a href="{% url 'sportclub:profile' slug=user.sportclubs.slug %}">No</a>
+
+    {% endif %}
+
+    </form>
+  </body>
+</html>

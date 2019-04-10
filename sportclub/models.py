@@ -5,6 +5,7 @@ from django.conf import settings
 class SportClubModel(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete = models.CASCADE,
                                 primary_key = True, related_name = 'sportclubs')
+    slug = models.SlugField(unique=True)                            
     phone_number = models.CharField(max_length = 20, blank = False)
     address = models.TextField(blank = False)
     info = models.TextField(blank = True, null= True)

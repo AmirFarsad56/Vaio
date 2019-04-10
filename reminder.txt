@@ -1,10 +1,12 @@
 
 defining get_absolute_url to redirect to profile/login page after creating a user
 
-url for picture show in profile pages
 
-changing int:pk to slug:slug
+uploading several images ONE BY ONE
+updating the uploaded images
 
+
+url mapping for commonusers for seeing salon
 
 
 ---------------------------------------------------------------------------------------------
@@ -16,8 +18,10 @@ git push --force-with-lease origin master\\\\\
 
 Restrict users to only see books created by them and published
 
-class BookDetailView(DetailView):
 
+
+restricting every user to be able to see only objects created by them:
+class BookDetailView(DetailView):
 
 slug_field = 'isbn' #these two lines are used when we want to use slug_field instead of int pk
 slug_url_kwarg = 'isbn'
@@ -27,3 +31,14 @@ slug_url_kwarg = 'isbn'
 			return Book.objects.filter(is_published=True, user=self.request.user)
 		else:
 			return Book.objects.none()
+
+
+
+
+useful method to deal with a specific object
+def detale_bajki(request, slug):
+	    detale_bajki = get_object_or_404(Wpisy, slug=slug)
+
+
+method for using function decorators on CBVs
+@method_decorator([login_required, sportclub_required], name='dispatch')

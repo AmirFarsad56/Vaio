@@ -1,6 +1,7 @@
 
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
+from django.utils.text import slugify
 
 #handmade classes
 from commonuser.forms import CommonUserForm
@@ -44,6 +45,7 @@ def CommonUserSignupView(request):
                      user.save()
                      commonuser = commonuser_form.save(commit=False)
                      commonuser.user = user
+                     commonuser.slug = slugify(user.username)
                      #not dealing well with picture
                      if 'picture' in request.FILES:
                         commonuser.picture = request.FILES['picture']
