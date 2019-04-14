@@ -5,8 +5,15 @@ defining get_absolute_url to redirect to profile/login page after creating a use
 uploading several images ONE BY ONE
 updating the uploaded images
 
-
+setting profile page private for the owners
 url mapping for commonusers for seeing salon
+
+setting is_confirmed = True in superuser view
+
+setting null = False wherever blank = Flase
+
+delete migrations and makemigrations initially
+PYINSTALLER
 
 
 ---------------------------------------------------------------------------------------------
@@ -18,19 +25,9 @@ git push --force-with-lease origin master\\\\\
 
 Restrict users to only see books created by them and published
 
+time model must be generated daily automatically for 1 year length
 
 
-restricting every user to be able to see only objects created by them:
-class BookDetailView(DetailView):
-
-slug_field = 'isbn' #these two lines are used when we want to use slug_field instead of int pk
-slug_url_kwarg = 'isbn'
-
-	def get_queryset(self):
-		if self.request.user.is_authenticated:
-			return Book.objects.filter(is_published=True, user=self.request.user)
-		else:
-			return Book.objects.none()
 
 
 
@@ -42,3 +39,18 @@ def detale_bajki(request, slug):
 
 method for using function decorators on CBVs
 @method_decorator([login_required, sportclub_required], name='dispatch')
+
+{
+Every Profile Page must be protected with this for CBVs:
+restricting every user to be able to see only objects created by them:
+	def get_queryset(self):
+		if self.request.user.is_authenticated:
+			return Book.objects.filter(is_published=True, user=self.request.user)
+		else:
+			return Book.objects.none()
+
+and these for function views:
+
+sportclub = get_object_or_404(SportClubModel, slug=slug)
+	if sportclub == request.user.sportclubs:
+}

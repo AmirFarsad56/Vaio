@@ -7,7 +7,8 @@ class SalonForm(forms.ModelForm):
         model = SalonModel
         fields = ('area','floor_type','locker',
                   'drinking_water','parking_area','shower',
-                  'changing_room')
+                  'changing_room','is_futsall','is_volleyball',
+                  'is_football','is_basketball',)
 
 class SalonPictureForm(forms.ModelForm):
 

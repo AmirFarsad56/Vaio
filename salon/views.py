@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.views.generic import UpdateView, DeleteView, DetailView
 from django.forms import modelformset_factory
@@ -21,47 +23,60 @@ from django.contrib import messages
 
 
 
-
+@login_required
+@sportclub_required
 def SalonCreateView(request,slug):
-    imageformset = modelformset_factory(SalonPictureModel,
-                                        form=SalonPictureForm, extra=4)
-    pending = True
-    if request.method == 'POST':
-        salon_form = SalonForm(data = request.POST)
-        formsets = imageformset(request.POST or None, request.FILES or None)
-        if salon_form.is_valid() and formsets.is_valid():
+    sportclub = get_object_or_404(SportClubModel, slug=slug)
+    if sportclub == request.user.sportclubs:
 
-            messages.success(request,'سالن با موفقیت اضافه شد')
-            salon = salon_form.save(commit=False)
-            sportclub = get_object_or_404(SportClubModel, slug=slug)
-            salon.sportclub = sportclub
-            salon.save()
-            pending = False
-            for formset in formsets.cleaned_data:
-                if formset:
-                    picture = formset['picture']
-                    photo = SalonPictureModel(salon = salon, picture = picture)
-                    photo.save()
+        imageformset = modelformset_factory(SalonPictureModel,
+                                            form=SalonPictureForm, extra=4)
+        pending = True
+        if request.method == 'POST':
+            salon_form = SalonForm(data = request.POST)
+            formsets = imageformset(request.POST or None, request.FILES or None)
+            if salon_form.is_valid() and formsets.is_valid():
+
+                messages.success(request,'سالن با موفقیت اضافه شد')
+                salon = salon_form.save(commit=False)
+                #sportclub = get_object_or_404(SportClubModel, slug=slug)
+                salon.sportclub = sportclub
+                salon.save()
+                pending = False
+                for formset in formsets.cleaned_data:
+                    if formset:
+                        picture = formset['picture']
+                        photo = SalonPictureModel(salon = salon, picture = picture)
+                        photo.save()
+            else:
+                print(salon_form.errors)
         else:
-            print(salon_form.errors)
+            salon_form = SalonForm()
+            formsets = imageformset(queryset=SalonPictureModel.objects.none())
     else:
-        salon_form = SalonForm()
-        formsets = imageformset(queryset=SalonPictureModel.objects.none())
-
+        return HttpResponseRedirect(reverse('login'))
     return render(request,'salon/createsalon.html',
                   {'salon_form':salon_form,
                   'formsets':formsets,
                    'pending':pending})
 
+
+@method_decorator([login_required, sportclub_required], name='dispatch')
 class SalonUpdateView(UpdateView):
     model = SalonModel
     fields = '__all__'
     template_name = 'salon/updatesalon.html'
+
+    def get_queryset(self):
+        return SalonModel.objects.filter(sportclub = self.request.user.sportclubs)
+
+
 
 @method_decorator([login_required, sportclub_required], name='dispatch')
 class SalonDetailView(DetailView):
     model = SalonModel
     context_object_name = 'salon_detail'
     template_name = 'salon/salondetail.html'
+
     def get_queryset(self):
         return SalonModel.objects.filter(sportclub = self.request.user.sportclubs)

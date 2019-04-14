@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView
 from django.utils.text import slugify
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from accounts.decorators import superuser_required
 
 #handmade classes
 from sportclub.forms import SportClubForm
 from accounts.forms import UserForm
 from sportclub.models import SportClubModel
 from accounts.models import UserModel
+from sportclub.decorators import sportclub_required
 
 
 #recaptcha
@@ -15,7 +19,7 @@ import urllib
 from django.conf import settings
 from django.contrib import messages
 
-
+@superuser_required
 def SportClubSignupView(request):
     registered = False
 
@@ -70,8 +74,11 @@ def SportClubSignupView(request):
                            'sportclub_form':sportclub_form,
                            'registered':registered})
 
-
+@method_decorator([login_required, sportclub_required], name='dispatch')
 class SportClubProfileView(DetailView):
     model = SportClubModel
     context_object_name = 'sportclub_detail'
     template_name = 'sportclub/sportclubprofile.html'
+
+    def get_queryset(self):
+        return SportClubModel.objects.filter(user = self.request.user)
