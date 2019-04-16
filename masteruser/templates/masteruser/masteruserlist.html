@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <h1>List of Active MasterUsers</h1>
+    {% for masteruser in masterusers %}
+    {% if masteruser.user.is_active %}
+    Username: {{masteruser.user.username}}<br>
+    Active: {{masteruser.user.is_active}}<br>
+    Email: {{masteruser.user.email}}<br>
+    First name: {{masteruser.user.first_name}}<br>
+    Last name: {{masteruser.user.last_name}}<br>
+    Phone number: {{masteruser.phone_number}}<br>
+    profile image <img src="{{masteruser.picture.url}}" width="70" height="70" /><br>
+    <a href="{% url 'masteruser:ban' pk=masteruser.pk %}">BAN</a> user?<br>
+    {% endif %}
+    -----------------------------------------<br>
+    {% endfor %}
+    <h1>List of Banned MasterUsers:</h1>
+    {% for masteruser in masterusers %}
+    {% if not masteruser.user.is_active %}
+    Username: {{masteruser.user.username}}<br>
+    Active: {{masteruser.user.is_active}}<br>
+    Email: {{masteruser.user.email}}<br>
+    First name: {{masteruser.user.first_name}}<br>
+    Last name: {{masteruser.user.last_name}}<br>
+    Phone number: {{masteruser.phone_number}}<br>
+    profile image <img src="{{masteruser.picture.url}}" width="70" height="70" /><br>
+    <a href="{% url 'masteruser:delete' pk=masteruser.pk %}">DELETE</a> user?<br>
+    <a href="{% url 'masteruser:unban' pk=masteruser.pk %}">UnBan</a> user?<br>
+    {% endif %}
+    {% endfor %}
+  </body>
+</html>

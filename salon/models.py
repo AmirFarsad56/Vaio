@@ -19,6 +19,10 @@ class SalonModel(models.Model):
     is_football = models.BooleanField(blank = False, null = False)
     is_basketball = models.BooleanField(blank = False, null = False)
 
+    def __str__(self):
+        name = str(self.area)+' square meters'
+        return name
+
 
 class SalonPictureModel(models.Model):
     salon = models.ForeignKey(SalonModel, on_delete = models.CASCADE,

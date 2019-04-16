@@ -15,6 +15,12 @@ setting null = False wherever blank = Flase
 delete migrations and makemigrations initially
 PYINSTALLER
 
+masterusers should update their pictures and password
+
+for setting price in sessions with sportclub their bank account details must be defined
+
+fixing redirect for superuser required login page
+
 
 ---------------------------------------------------------------------------------------------
 prefix for urls for adding the ability to other usages of this website

@@ -7,13 +7,13 @@
   <body>
     <p>this is the detail page for the sportclub</p><br>
     <p>
-    username: {{ sportclub_detail.user.username }}<br>
+    Username: {{ sportclub_detail.user.username }}<br>
     email: {{ sportclub_detail.user.email }}<br>
     phone number{{ sportclub_detail.phone_number}}<br>
     address: {{ sportclub_detail.address}}<br>
     more info: {{ sportclub_detail.info}}<br>
     slug: {{sportclub_detail.slug}}<br>
-    sportclub image: <img src="{{sportclub_detail.picture.url}}" /><br>
+    sportclub image: <img src="{{sportclub_detail.picture.url}}" width="70" height="70"/><br>
     Add a Salon
     <a href="{% url 'sportclub:salon:createsalon' slug=user.sportclubs.slug %}">
        here</a>

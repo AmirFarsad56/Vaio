@@ -3,7 +3,7 @@ from django.views.generic import DetailView
 from django.utils.text import slugify
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from accounts.decorators import superuser_required
+
 
 #handmade classes
 from sportclub.forms import SportClubForm
@@ -11,6 +11,7 @@ from accounts.forms import UserForm
 from sportclub.models import SportClubModel
 from accounts.models import UserModel
 from sportclub.decorators import sportclub_required
+from masteruser.decorators import masteruser_required
 
 
 #recaptcha
@@ -19,7 +20,7 @@ import urllib
 from django.conf import settings
 from django.contrib import messages
 
-@superuser_required
+@masteruser_required
 def SportClubSignupView(request):
     registered = False
 

@@ -6,5 +6,4 @@ class CommonUserForm(forms.ModelForm):
 
     class Meta:
         model = CommonUserModel
-        fields = ('first_name','last_name','phone_number','picture')
-
+        fields = ('phone_number','picture')

@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('commonuser.urls',namespace = 'commonuser')),
     path('', include('sportclub.urls',namespace = 'sportclub')),
+    path('', include('masteruser.urls',namespace = 'masteruser')),
     #path('accounts/',include('accounts.urls', namespace = 'accounts')),
     path('',IndexView.as_view(),name = 'index'),
     path('',include('django.contrib.auth.urls')),

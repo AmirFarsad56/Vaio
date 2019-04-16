@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <h1>Are you Sure want to BAN this masteruser?</h1>
+    Username: {{masteruser.user.username}}<br>
+    Email: {{masteruser.user.email}}<br>
+    First name: {{masteruser.user.first_name}}<br>
+    Last name: {{masteruser.user.last_name}}<br>
+    Phone number: {{masteruser.phone_number}}<br>
+    <form method="POST">
+      {% csrf_token %}
+      <input type="submit" value="Yes Ban">
+    </form>
+    <a href="{% url 'masteruser:list' %}">NO take me back</a>
+
+  </body>
+</html>

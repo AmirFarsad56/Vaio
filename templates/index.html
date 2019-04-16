@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    {% if user.is_authenticated %}
+
     <p>welcome {{user.username}}</p>
     {% if user.is_sportclub %}
     <a href="{% url 'sportclub:profile' slug=user.sportclubs.slug %}">Profile Page</a>
@@ -17,15 +17,22 @@
     <a href="{% url 'commonuser:profile' slug=user.commonusers.slug %}">Profile Page</a>
     {% endif %}
 
+    {% if user.is_masteruser %}
+    <a href="{% url 'index' %}">Profile Page</a>
+    {% endif %}
+
     <p> <a href="{% url 'logout' %}">logout</a></p>
-    {% else %}
+
 
     <p> please login from <a href="{% url 'login' %}">here</a></p>
     <p>or sign up commonuser from <a href="{% url 'commonuser:signup' %}">here</a></p>
     <p>or signup a sportclub via <a href="{% url 'sportclub:signup' %}">here</a></p>
+    <p>or signup a masteruser via <a href="{% url 'masteruser:signup' %}">here</a></p>
+
+    
+    <p>list of masteruser <a href="{% url 'masteruser:list' %}">here</a>
 
 
-    {% endif %}
 
 
 </body>
