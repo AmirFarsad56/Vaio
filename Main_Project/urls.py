@@ -22,7 +22,8 @@ from .views import IndexView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('commonuser.urls',namespace = 'commonuser')),
+    path('superuser/', include('accounts.urls',namespace = 'accounts')),
+    path('commonuser/', include('commonuser.urls',namespace = 'commonuser')),
     path('', include('sportclub.urls',namespace = 'sportclub')),
     path('', include('masteruser.urls',namespace = 'masteruser')),
     #path('accounts/',include('accounts.urls', namespace = 'accounts')),

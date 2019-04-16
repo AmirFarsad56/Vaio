@@ -47,10 +47,10 @@ def MasterUserSignupView(request):
                      messages.success(request, 'ثبت نام با موفقیت انجام شد')
                      user = user_form.save()
                      user.is_masteruser = True
+                     user.slug = slugify(user.username)
                      user.save()
                      masteruser = masteruser_form.save(commit=False)
                      masteruser.user = user
-                     masteruser.slug = slugify(user.username)
                      masteruser.save()
                      registered = True
                 else:
@@ -123,9 +123,3 @@ def MasterUserDeleteView(request,pk):
                           {'masteruser':masteruser})
     else:
         return HttpResponseRedirect(reverse('login'))
-
-
-def delete(request):
-    query = People.objects.get(pk=id)
-    query.delete()
-    return HttpResponse("Deleted!")

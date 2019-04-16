@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <p>Welcome To Profile Page {{superuser.username}}</p>
+    {% if not user.first_name %}
+    <p>you have not entered your details <br>
+      please update your datas through <a href="{ url 'superuser:update' slug=superuser.slug }">here</a></p>
+      {% else %}
+      mr {{superuser.first_name}} {{superuser.last_name}}<br>
+      **************** {{superuser.slug}}
+      list of <a href="{% url 'masteruser:list' %}">MasterUsers</a>
+      {% endif %}
+  </body>
+</html>

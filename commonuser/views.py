@@ -42,6 +42,7 @@ def CommonUserSignupView(request):
                      user = user_form.save()
                      #user.set_password(user.password)
                      user.is_commonuser = True
+                     user.slug = slugify(user.username)
                      user.save()
                      commonuser = commonuser_form.save(commit=False)
                      commonuser.user = user

@@ -47,11 +47,10 @@ def SportClubSignupView(request):
                      user = user_form.save()
                      #user.set_password(user.password)
                      user.is_sportclub = True
+                     user.slug = slugify(user.username)
                      user.save()
                      sportclub = sportclub_form.save(commit=False)
                      sportclub.user = user
-                     sportclub.slug = slugify(user.username)
-                     #not dealing well with picture
                      if 'picture' in request.FILES:
                         sportclub.picture = request.FILES['picture']
 
