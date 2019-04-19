@@ -10,7 +10,9 @@ from django.shortcuts import get_object_or_404
 
 #handmade
 from accounts.forms import UserForm
+from accounts.models import UserModel
 from accounts.decorators import superuser_required
+from masteruser.decorators import masteruser_required
 from masteruser.forms import MasterUserForm
 from masteruser.models import MasterUserModel
 
@@ -70,11 +72,23 @@ def MasterUserSignupView(request):
                            'masteruser_form':masteruser_form,
                            'registered':registered})
 
+
+@login_required
+@masteruser_required
+def MasterUserProfileView(request,slug):
+    user_instance = get_object_or_404(UserModel,slug = slug)
+    masteruser_instance = get_object_or_404(MasterUserModel, user = user_instance)
+    return render(request,'masteruser/masteruserprofile.html',
+                  {'masteruser_detail':masteruser_instance})
+
+
+
 @method_decorator([login_required, superuser_required], name='dispatch')
 class MasterUserListView(ListView):
     model = MasterUserModel
     context_object_name = 'masterusers'
     template_name = 'masteruser/masteruserlist.html'
+
 
 @login_required
 @superuser_required

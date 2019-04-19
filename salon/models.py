@@ -27,6 +27,10 @@ class SalonModel(models.Model):
         self.is_confirmed = True
         self.save()
 
+    def ban(self):
+        self.is_confirmed = False
+        self.save()    
+
 
 
 

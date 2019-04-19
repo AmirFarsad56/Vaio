@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+        <p>Here is the list of Banned SportClubs</p>
+        {% for sportclub in sportclubs %}
+        {% if not sportclub.user.is_active %}
+        {{ sportclub.user.username }}<br>
+        {{ sportclub.address }}<br>
+        <p>sportclub details: <a href="{% url 'sportclub:detail' slug=sportclub.user.slug %}">here</a> </p>
+
+        <br>
+                <p>----------------------------------------------------</p><br>
+        {% endif %}
+        {% endfor %}
+
+
+  </body>
+</html>

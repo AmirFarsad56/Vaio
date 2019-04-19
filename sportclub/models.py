@@ -11,8 +11,8 @@ class SportClubModel(models.Model):
     info = models.TextField(blank = True, null= True)
     picture = models.ImageField(default = r'sportclub/default/coverpicture.png',
                                  upload_to=r'sportclub/coverpicture')
-    bankaccount_name = models.CharField(max_length = 300, null = True, blank = True)
-    bankaccount_number = models.CharField(max_length = 30, null = True, blank = True)
+    bankaccount_ownername = models.CharField(max_length = 300, null = True, blank = True)
+    bankaccount_accountnumber = models.CharField(max_length = 30, null = True, blank = True)
     bankaccount_cardnumber = models.CharField(max_length = 30, null = True, blank = True)
     bankaccount_shabanumber = models.CharField(max_length = 50, null = True, blank = True)
     #later these fields can change to iinteger field if need to
@@ -21,3 +21,4 @@ class SportClubModel(models.Model):
 
     def __str__(self):
         return self.user.username
+    

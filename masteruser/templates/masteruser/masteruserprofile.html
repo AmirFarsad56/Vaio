@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <p>Here is your profile page:</p>
+    <p>
+      username: {{masteruser_detail.user.username}}<br>
+      phone number: {{masteruser_detail.phone_number}}<br>
+      Profile image:
+      <img src="{{masteruser_detail.picture.url}}" width="80" height="80"/><br>
+      </p>
+      <p>signup a sportclub via <a href="{% url 'sportclub:signup' %}">here</a></p>
+      <p>list of <a href="{% url 'salon:confirmedsalonlist' %}">confirmed salons</a></p>
+      <p>list of <a href="{% url 'salon:unconfirmedsalonlist' %}">unconfirmed salons</a></p>
+      <p>list of <a href="{% url 'sportclub:list' %}">SportClubs</a></p>
+      <p>list of BANNED <a href="{% url 'sportclub:bannedlist' %}">SportClubs</a></p>
+
+
+  </body>
+</html>

@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.utils.text import slugify
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, get_list_or_404
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
@@ -12,6 +14,7 @@ from sportclub.forms import SportClubForm
 from accounts.forms import UserForm
 from sportclub.models import SportClubModel
 from accounts.models import UserModel
+from salon.models import SalonModel
 from sportclub.decorators import sportclub_required
 from masteruser.decorators import masteruser_required
 
@@ -47,7 +50,7 @@ def SportClubSignupView(request):
                 if result['success']:
                      messages.success(request, 'ثبت نام با موفقیت انجام شد')
                      user = user_form.save(commit = False)#changed this if sth wrong happen ..
-                     
+
                      user.is_sportclub = True
                      user.save()
                      sportclub = sportclub_form.save(commit=False)
@@ -75,16 +78,6 @@ def SportClubSignupView(request):
                           {'user_form':user_form,
                            'sportclub_form':sportclub_form,
                            'registered':registered})
-'''
-@method_decorator([login_required, sportclub_required], name='dispatch')
-class SportClubProfileView(DetailView):
-    model = SportClubModel
-    context_object_name = 'sportclub_detail'
-    template_name = 'sportclub/sportclubprofile.html'
-
-    def get_queryset(self):
-        return SportClubModel.objects.filter(user = self.request.user)
-'''
 
 
 @sportclub_required
@@ -94,3 +87,87 @@ def SportClubProfileView(request, slug):
     SportClubDetail = get_object_or_404(SportClubModel, user = user)
     return render(request,'sportclub/sportclubprofile.html',
                     {'sportclub_detail':SportClubDetail})
+
+
+@method_decorator([login_required, masteruser_required], name='dispatch')
+class SportClubListView(ListView):
+    model = SportClubModel
+    context_object_name = 'sportclubs'
+    template_name = 'sportclub/sportclublist.html'
+
+
+@login_required
+@masteruser_required
+def SportClubDetailView(request,slug):
+    if request.user.is_masteruser:
+        user_instance = get_object_or_404(UserModel, slug = slug)
+        sportclub_instance = get_object_or_404(SportClubModel, user = user_instance)
+        salon_instances = get_list_or_404(SalonModel, sportclub = sportclub_instance)
+        return render(request,'sportclub/sportclubdetail.html',
+                      {'sportclub_detail':sportclub_instance,
+                       'salons':salon_instances})
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+
+@login_required
+@masteruser_required
+def SportClubBanView(request,slug):
+    if request.user.is_masteruser:
+        user_instance = get_object_or_404(UserModel, slug = slug)
+        user_instance.is_active = False
+        user_instance.save()
+        sportclub_instance = get_object_or_404(SportClubModel, user = user_instance)
+        salon_instances = get_list_or_404(SalonModel, sportclub = sportclub_instance)
+        for salon_instance in salon_instances:
+            salon_instance.is_confirmed = False
+            salon_instance.save()
+        return HttpResponseRedirect(reverse('sportclub:list'))
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+
+@login_required
+@masteruser_required
+def SportClubUnBanView(request,slug):
+    if request.user.is_masteruser:
+        user_instance = get_object_or_404(UserModel, slug = slug)
+        user_instance.is_active = False
+        user_instance.save()      
+        return HttpResponseRedirect(reverse('sportclub:list'))
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+
+
+@login_required
+@masteruser_required
+def SportClubUnBanView(request,slug):
+    if request.user.is_masteruser:
+        user_instance = get_object_or_404(UserModel, slug = slug)
+        user_instance.is_active = True
+        user_instance.save()
+        return HttpResponseRedirect(reverse('sportclub:list'))
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+
+
+@login_required
+@masteruser_required
+def SportClubDeleteView(request,slug):
+    if request.user.is_masteruser:
+        user_instance = get_object_or_404(UserModel, slug = slug)
+        sportclub_instance = get_object_or_404(SportClubModel, user = user_instance)
+        sportclub_instance.delete()
+        user_instence.delete()
+        return HttpResponseRedirect(reverse('sportclub:bannedlist'))
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+
+@method_decorator([login_required, masteruser_required], name='dispatch')
+class BannedSportClubListView(ListView):
+    model = SportClubModel
+    context_object_name = 'sportclubs'
+    template_name = 'sportclub/bannedsportclublist.html'

@@ -7,6 +7,11 @@ updating the uploaded images
 
 sportclubs should change their password in first_login
 
+salons is_confirmed field must be set to False when sportclubs updates them
+
+salons must have a pending filed that when a masteruser told them to change your salon other masterusers
+doesn't see that salon in unpublished list
+
 
 url mapping for commonusers for seeing salon
 
@@ -30,6 +35,16 @@ def get_success_url(self):
 		return reverse("accounts:profile", kwargs={'slug': slug})
 
 ---------------------------------------------------------------------------------------------
+when masteruser deletes or banes sth he should send an email of why to the owner
+
+everything that a master user done must be result in a reverse to a profile page because
+e.g. we can ban a salon from two ways and they should not endup both in the unconfirmedsalon list
+
+deleting the confirm page for delete and ban and unbaning masterusers via superusers
+
+in front part all delete ban or unbans must be asked for a confirm in a pop up show
+
+
 prefix for urls for adding the ability to other usages of this website
 
 page for admin profile and settings

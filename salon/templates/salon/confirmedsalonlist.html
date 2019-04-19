@@ -5,16 +5,16 @@
     <title></title>
   </head>
   <body>
-    <p>Here is the list of Published Salons:</p>
+    <p>Here is the list of Confirmed Salons:</p>
     {% for salon in salons %}
-    {% if salon.is_published %}
-    owner: {{salon.sportclub.username}} this should change to name later <br>
-    belongs to: {{salon.sportclub.username}}
-    floor type: {{salon.floor_type}}
-    No. showers: {{salon.shower}}
-    No. chnage=ing rooms: {{salon.changing_room}}
-    locker {{salon.locker}}
-    this salon is for
+    {% if salon.is_confirmed %}
+    owner: {{salon.sportclub.username}} this should change to first and lastname later <br>
+    belongs to: {{salon.sportclub.user.username}}<br>
+    floor type: {{salon.floor_type}}<br>
+    No. showers: {{salon.shower}}<br>
+    No. chnageing rooms: {{salon.changing_room}}<br>
+    locker {{salon.locker}}<br>
+    this salon is for:
     {% if salon.is_futsall %}
     futsal
     {% endif %}
@@ -27,6 +27,10 @@
     {% if salon.is_football %}
     football
     {% endif %}
+    <p>salon details: <a href="{% url 'salon:detail' pk=salon.pk %}">here</a> </p>
+    
+
+    <br>
     {% for pic in salon.pictures.all %}
     <p>Salon image: </p><img src="{{pic.picture.url}}" width="70" height="70"/><br>
     {% endfor %}

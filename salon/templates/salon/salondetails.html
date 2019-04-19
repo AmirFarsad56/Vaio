@@ -5,7 +5,7 @@
     <title></title>
   </head>
   <body>
-    <h1>Here is Salon's Details</h1>
+    <h1>Salon Details</h1>
     <p>
       <p>
       Area: {{salon_detail.area}}<br>
@@ -30,9 +30,12 @@
       {% for pic in salon_detail.pictures.all %}
       <p>Salon image: </p><img src="{{pic.picture.url}}" width="70" height="70"/><br>
       {% endfor %}
-    <form method="POST">
-      {% csrf_token %}
-      <input type="submit" value="Yes Confirm">
-    </form>
+      {% if salon.is_confirmed %}
+      <p>ban salon from <a href="{% url 'salon:ban' pk=salon_detail.pk %}">here</a> </p>
+      {% else %}
+      <p>Confirm Salon From: <a href="{% url 'salon:confirm' pk=salon_detail.pk %}">here</a> </p>
+      <p>DELETE Salon From: <a href="{% url 'salon:delete' pk=salon_detail.pk %}">here</a> </p>
+      {% endif %}
+
   </body>
 </html>

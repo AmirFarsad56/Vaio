@@ -11,7 +11,9 @@
         <div class="jumbotron">
             {% if registered %}
             <h1>Thank you for registering!</h1>
-            <p>please <a href="{% url 'login' %}">login</a></p>
+            <p>Check it's login via<a href="{% url 'login' %}">login</a></p>
+            or go back to profile Page via
+            <a href="{% url 'masteruser:profile' slug=user.slug %}"> here</a>
 
             {% else %}
             <h1>Register Here</h1>
