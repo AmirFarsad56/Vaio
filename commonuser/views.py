@@ -40,14 +40,10 @@ def CommonUserSignupView(request):
                 if result['success']:
                      messages.success(request, 'ثبت نام با موفقیت انجام شد')
                      user = user_form.save()
-                     #user.set_password(user.password)
                      user.is_commonuser = True
-                     user.slug = slugify(user.username)
                      user.save()
                      commonuser = commonuser_form.save(commit=False)
                      commonuser.user = user
-                     commonuser.slug = slugify(user.username)
-                     #not dealing well with picture
                      if 'picture' in request.FILES:
                         commonuser.picture = request.FILES['picture']
 

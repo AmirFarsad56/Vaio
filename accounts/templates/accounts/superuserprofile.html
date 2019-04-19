@@ -7,12 +7,17 @@
   <body>
     <p>Welcome To Profile Page {{superuser.username}}</p>
     {% if not user.first_name %}
+    **************** {{superuser.slug}}
     <p>you have not entered your details <br>
-      please update your datas through <a href="{ url 'superuser:update' slug=superuser.slug }">here</a></p>
+      please update your datas through
+      <a href="{% url 'accounts:profile' slug=user.slug %}"> here </a>
+      to be able to see you complete profile page
       {% else %}
       mr {{superuser.first_name}} {{superuser.last_name}}<br>
-      **************** {{superuser.slug}}
-      list of <a href="{% url 'masteruser:list' %}">MasterUsers</a>
+      you can update you info
+      <a href="{% url 'accounts:update' slug=user.slug %}">here</a><br>
+            list of <a href="{% url 'masteruser:list' %}">MasterUsers</a>
       {% endif %}
+    </p>
   </body>
 </html>

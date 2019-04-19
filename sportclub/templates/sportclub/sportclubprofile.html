@@ -15,7 +15,7 @@
     slug: {{sportclub_detail.slug}}<br>
     sportclub image: <img src="{{sportclub_detail.picture.url}}" width="70" height="70"/><br>
     Add a Salon
-    <a href="{% url 'sportclub:salon:createsalon' slug=user.slug %}">
+    <a href="{% url 'salon:createsalon' slug=user.slug %}">
        here</a>
        <br>
     <br>
@@ -30,8 +30,8 @@
     <li>shower: {{salon.shower}}<br></li>
     </ul>
     Update Datas?<br>
-    <a href="{% url 'sportclub:salon:updatesalon' slug=user.slug pk=salon.pk %}"> Yes </a><br>
-    <a href="{% url 'sportclub:salon:salondetail' slug=user.slug pk=salon.pk %}"> Details </a><br>
+    <a href="{% url 'salon:updatesalon' slug=user.slug pk=salon.pk %}"> Yes </a><br>
+    <a href="{% url 'salon:salondetail' slug=user.slug pk=salon.pk %}"> Details </a><br>
     -------------------------------------------<br>
     {% endfor %}
     {% endif %}

@@ -10,7 +10,9 @@ class UserModel(AbstractUser):
     is_commonuser = models.BooleanField('CommonUser Status', default = False)
     is_masteruser = models.BooleanField('MasterUser Status', default = False)
     email = models.EmailField(unique = True, blank = False)
-    slug = models.SlugField(unique = True, null = True)
+    slug = models.SlugField(unique = True, null = False, blank = False)
+    picture = models.ImageField(upload_to =r'superuser/coverpicture',
+                                null = True, blank = True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.username)

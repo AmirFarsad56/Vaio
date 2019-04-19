@@ -15,3 +15,10 @@ class SalonPictureForm(forms.ModelForm):
     class Meta():
         model = SalonPictureModel
         fields = ('picture',)
+
+
+class SalonConfirmForm(forms.ModelForm):
+
+    class Meta():
+        model = SalonModel
+        fields = ('is_confirmed',)

@@ -5,12 +5,12 @@ defining get_absolute_url to redirect to profile/login page after creating a use
 uploading several images ONE BY ONE
 updating the uploaded images
 
-setting profile page private for the owners
+sportclubs should change their password in first_login
+
+
 url mapping for commonusers for seeing salon
 
-setting is_confirmed = True in superuser view
 
-setting null = False wherever blank = Flase
 
 delete migrations and makemigrations initially
 PYINSTALLER
@@ -19,8 +19,15 @@ masterusers should update their pictures and password
 
 for setting price in sessions with sportclub their bank account details must be defined
 
+
 fixing redirect for superuser required login page
 
+
+
+
+def get_success_url(self):
+		slug = self.kwargs['slug']
+		return reverse("accounts:profile", kwargs={'slug': slug})
 
 ---------------------------------------------------------------------------------------------
 prefix for urls for adding the ability to other usages of this website

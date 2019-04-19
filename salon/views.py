@@ -2,16 +2,19 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
-from django.views.generic import UpdateView, DeleteView, DetailView
+from django.views.generic import UpdateView, DeleteView, DetailView, ListView
 from django.forms import modelformset_factory
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
 #handmade
+from accounts.models import UserModel
 from sportclub.models import SportClubModel
 from salon.forms import SalonForm, SalonPictureForm
 from salon.models import SalonModel, SalonPictureModel
 from sportclub.decorators import sportclub_required
+from accounts.decorators import superuser_required
+from masteruser.decorators import masteruser_required
 
 
 #recaptcha
@@ -26,7 +29,8 @@ from django.contrib import messages
 @login_required
 @sportclub_required
 def SalonCreateView(request,slug):
-    sportclub = get_object_or_404(SportClubModel, slug=slug)
+    user = get_object_or_404(UserModel, slug=slug)
+    sportclub = get_object_or_404(SportClubModel, user = user)
     if sportclub == request.user.sportclubs:
 
         imageformset = modelformset_factory(SalonPictureModel,
@@ -80,3 +84,67 @@ class SalonDetailView(DetailView):
 
     def get_queryset(self):
         return SalonModel.objects.filter(sportclub = self.request.user.sportclubs)
+
+
+@method_decorator([login_required, masteruser_required], name='dispatch')
+class PublishedSalonListView(ListView):
+    model = SalonModel
+    context_object_name = 'salons'
+    template_name = 'salon/publishedsalonlist.html'
+
+
+@method_decorator([login_required, masteruser_required], name='dispatch')
+class UnPublishedSalonListView(ListView):
+    model = SalonModel
+    context_object_name = 'salons'
+    template_name = 'salon/unpublishedsalonlist.html'
+
+
+@login_required
+@masteruser_required
+def SalonConfirmView(request,pk):
+    if request.user.is_masteruser:
+        salon = get_object_or_404(SalonModel,pk = pk)
+        if request.method == 'POST':
+
+            salon.confirm()
+            return HttpResponseRedirect(reverse('salon:unpublishedsalonlist'))
+        else:
+            return render(request,'salon/salonconfirm.html',
+                          {'salon_detail':salon})
+    else:
+        return HttpResponseRedirect(reverse('login'))
+'''
+@login_required
+@superuser_required
+def MasterUserUnBanView(request,pk):
+    if request.user.is_superuser:
+        masteruser = get_object_or_404(MasterUserModel,pk = pk)
+        if request.method == 'POST':
+            masteruser.user.is_active = True
+            masteruser.user.save()
+            return HttpResponseRedirect(reverse('masteruser:list'))
+        else:
+            return render(request,'masteruser/masteruserunban.html',
+                          {'masteruser':masteruser})
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+
+@login_required
+@superuser_required
+def MasterUserDeleteView(request,pk):
+    if request.user.is_superuser:
+        masteruser = get_object_or_404(MasterUserModel,pk = pk)
+        submited = False
+        if request.method == 'POST':
+            masteruser.delete()
+            masteruser.user.delete()
+            return HttpResponseRedirect(reverse('masteruser:list'))
+        else:
+            return render(request,'masteruser/masteruserdelete.html',
+                          {'masteruser':masteruser})
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+'''

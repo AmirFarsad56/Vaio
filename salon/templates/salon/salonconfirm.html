@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <h1>Here is Salon's Details</h1>
+    <p>
+      <p>
+      Area: {{salon_detail.area}}<br>
+      Floor Type{{salon_detail.floor_type}}<br>
+      Locker: {{salon_detail.locker}}<br>
+      Shower: {{salon_detail.shower}}<br>
+      Changing Room: {{salon_detail.changing_room}}<br>
+      this salon is for:
+      {% if salon_detail.is_futsall %}
+      futsal
+      {% endif %}
+      {% if salon_detail.is_volleyball %}
+      volleyball
+      {% endif %}
+      {% if salon_detail.is_basketball %}
+      basketball
+      {% endif %}
+      {% if salon_detail.is_football %}
+      football
+      {% endif %}
+      </p>
+      {% for pic in salon_detail.pictures.all %}
+      <p>Salon image: </p><img src="{{pic.picture.url}}" width="70" height="70"/><br>
+      {% endfor %}
+    <form method="POST">
+      {% csrf_token %}
+      <input type="submit" value="Yes Confirm">
+    </form>
+  </body>
+</html>

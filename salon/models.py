@@ -5,7 +5,7 @@ class SalonModel(models.Model):
 
     sportclub = models.ForeignKey(SportClubModel, on_delete = models.CASCADE,
                                   related_name = 'salons')
-    is_confirmed = models.BooleanField(blank = False, default = False,
+    is_confirmed = models.BooleanField(default = False,
                                        null = False)
     area = models.CharField(max_length=264, blank=False, null = False)
     floor_type = models.CharField(max_length = 264, blank = True, null = True)
@@ -22,6 +22,12 @@ class SalonModel(models.Model):
     def __str__(self):
         name = str(self.area)+' square meters'
         return name
+
+    def confirm(self):
+        self.is_confirmed = True
+        self.save()
+
+
 
 
 class SalonPictureModel(models.Model):

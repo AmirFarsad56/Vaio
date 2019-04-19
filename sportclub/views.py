@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView
 from django.utils.text import slugify
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
 
 #handmade classes
+from accounts.models import UserModel
 from sportclub.forms import SportClubForm
 from accounts.forms import UserForm
 from sportclub.models import SportClubModel
@@ -44,13 +46,13 @@ def SportClubSignupView(request):
                 ''' End reCAPTCHA validation '''
                 if result['success']:
                      messages.success(request, 'ثبت نام با موفقیت انجام شد')
-                     user = user_form.save()
-                     #user.set_password(user.password)
+                     user = user_form.save(commit = False)#changed this if sth wrong happen ..
+                     
                      user.is_sportclub = True
-                     user.slug = slugify(user.username)
                      user.save()
                      sportclub = sportclub_form.save(commit=False)
                      sportclub.user = user
+
                      if 'picture' in request.FILES:
                         sportclub.picture = request.FILES['picture']
 
@@ -73,7 +75,7 @@ def SportClubSignupView(request):
                           {'user_form':user_form,
                            'sportclub_form':sportclub_form,
                            'registered':registered})
-
+'''
 @method_decorator([login_required, sportclub_required], name='dispatch')
 class SportClubProfileView(DetailView):
     model = SportClubModel
@@ -82,3 +84,13 @@ class SportClubProfileView(DetailView):
 
     def get_queryset(self):
         return SportClubModel.objects.filter(user = self.request.user)
+'''
+
+
+@sportclub_required
+@login_required
+def SportClubProfileView(request, slug):
+    user = request.user
+    SportClubDetail = get_object_or_404(SportClubModel, user = user)
+    return render(request,'sportclub/sportclubprofile.html',
+                    {'sportclub_detail':SportClubDetail})

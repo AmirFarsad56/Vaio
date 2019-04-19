@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+        <p>Here is the list of UnPublished Salons:</p>
+        {% for salon in salons %}
+        {% if not salon.is_published %}
+
+        {% if salon.is_published %}
+        Salon is Published: {{salon.is_published}}<br>
+        {% else %}
+        salon not published <br>
+        {% endif %}
+        owner: {{salon.sportclub.username}} this should change to first and lastname later <br>
+        belongs to: {{salon.sportclub.user.username}}<br>
+        floor type: {{salon.floor_type}}<br>
+        No. showers: {{salon.shower}}<br>
+        No. chnage=ing rooms: {{salon.changing_room}}<br>
+        locker {{salon.locker}}<br>
+        this salon is for:
+        {% if salon.is_futsall %}
+        futsal
+        {% endif %}
+        {% if salon.is_volleyball %}
+        volleyball
+        {% endif %}
+        {% if salon.is_basketball %}
+        basketball
+        {% endif %}
+        {% if salon.is_football %}
+        football
+        {% endif %}
+        <p>salon details: <a href="{% url 'salon:confirm' pk=salon.pk %}">here</a> </p>
+        <br>
+        {% for pic in salon.pictures.all %}
+        <p>Salon image: </p><img src="{{pic.picture.url}}" width="70" height="70"/><br>
+        {% endfor %}
+        {% endif %}
+                <p>----------------------------------------------------</p><br>
+        {% endfor %}
+
+
+  </body>
+</html>
