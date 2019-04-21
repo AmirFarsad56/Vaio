@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <h1>Here is the details of the master user</h1>
+    Username: {{masteruser.user.username}}<br>
+    Email: {{masteruser.user.email}}<br>
+    First name: {{masteruser.user.first_name}}<br>
+    Last name: {{masteruser.user.last_name}}<br>
+    Phone number: {{masteruser.phone_number}}<br>
+{% if masteruser.user.is_active %}
+    <p>This user is active</p>
+    <a href="{% url 'masteruser:ban' slug=masteruser.user.slug %}">BAN</a> user?<br>
+{% else %}
+    <p>This user is banned</p>
+    <a href="{% url 'masteruser:delete' slug=masteruser.user.slug %}">DELETE</a> user?<br>
+    <a href="{% url 'masteruser:unban' slug=masteruser.user.slug %}">UnBan</a> user?<br>
+{% endif %}
+  </body>
+</html>

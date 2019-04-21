@@ -1,7 +1,7 @@
 
 defining get_absolute_url to redirect to profile/login page after creating a user
 
-
+passworrd validators check
 uploading several images ONE BY ONE
 updating the uploaded images
 
@@ -45,13 +45,8 @@ deleting the confirm page for delete and ban and unbaning masterusers via superu
 
 in front part all delete ban or unbans must be asked for a confirm in a pop up show
 
-
 prefix for urls for adding the ability to other usages of this website
 
 page for admin profile and settings
-
-git push --force-with-lease origin master\\\\\
-
-Restrict users to only see books created by them and published
 
 time model must be generated daily automatically for 1 year length

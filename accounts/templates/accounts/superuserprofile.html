@@ -18,6 +18,11 @@
       <a href="{% url 'accounts:update' slug=user.slug %}">here</a><br>
             list of <a href="{% url 'masteruser:list' %}">MasterUsers</a>
       {% endif %}
+
+      <p>signup a masteruser via <a href="{% url 'masteruser:signup' %}">here</a></p>
+
+      <p>list of masteruser <a href="{% url 'masteruser:list' %}">here</a></p>
+      <p>list of banned masteruser <a href="{% url 'masteruser:bannedlist' %}">here</a></p>
     </p>
   </body>
 </html>

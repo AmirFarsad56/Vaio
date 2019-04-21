@@ -90,49 +90,62 @@ class MasterUserListView(ListView):
     template_name = 'masteruser/masteruserlist.html'
 
 
+@method_decorator([login_required, superuser_required], name='dispatch')
+class BannedMasterUserListView(ListView):
+    model = MasterUserModel
+    context_object_name = 'masterusers'
+    template_name = 'masteruser/bannedmasteruserlist.html'
+
+
+
 @login_required
 @superuser_required
-def MasterUserBanView(request,pk):
+def MasterUserBanView(request,slug):
     if request.user.is_superuser:
-        masteruser = get_object_or_404(MasterUserModel,pk = pk)
-        if request.method == 'POST':
-            masteruser.user.is_active = False
-            masteruser.user.save()
-            return HttpResponseRedirect(reverse('masteruser:list'))
-        else:
-            return render(request,'masteruser/masteruserban.html',
-                          {'masteruser':masteruser})
+        user = get_object_or_404(UserModel,slug = slug)
+        masteruser = get_object_or_404(MasterUserModel,user = user)
+        masteruser.user.is_active = False
+        masteruser.user.save()
+        return HttpResponseRedirect(reverse('masteruser:detail',
+                                            kwargs={'slug':masteruser.user.slug}))
     else:
         return HttpResponseRedirect(reverse('login'))
 
 @login_required
 @superuser_required
-def MasterUserUnBanView(request,pk):
+def MasterUserUnBanView(request,slug):
     if request.user.is_superuser:
-        masteruser = get_object_or_404(MasterUserModel,pk = pk)
-        if request.method == 'POST':
-            masteruser.user.is_active = True
-            masteruser.user.save()
-            return HttpResponseRedirect(reverse('masteruser:list'))
-        else:
-            return render(request,'masteruser/masteruserunban.html',
-                          {'masteruser':masteruser})
+        user = get_object_or_404(UserModel,slug = slug)
+        masteruser = get_object_or_404(MasterUserModel,user = user)
+        masteruser.user.is_active = True
+        masteruser.user.save()
+        return HttpResponseRedirect(reverse('masteruser:detail',
+                                            kwargs={'slug':masteruser.user.slug}))
     else:
         return HttpResponseRedirect(reverse('login'))
 
 
 @login_required
 @superuser_required
-def MasterUserDeleteView(request,pk):
+def MasterUserDeleteView(request,slug):
     if request.user.is_superuser:
-        masteruser = get_object_or_404(MasterUserModel,pk = pk)
-        submited = False
-        if request.method == 'POST':
-            masteruser.delete()
-            masteruser.user.delete()
-            return HttpResponseRedirect(reverse('masteruser:list'))
-        else:
-            return render(request,'masteruser/masteruserdelete.html',
-                          {'masteruser':masteruser})
+        user = get_object_or_404(UserModel,slug = slug)
+        masteruser = get_object_or_404(MasterUserModel,user = user)
+        masteruser.delete()
+        user.delete()
+        return HttpResponseRedirect(reverse('masteruser:bannedlist'))
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+
+
+@login_required
+@superuser_required
+def MasterUserDetailView(request,slug):
+    if request.user.is_superuser:
+        user_instance = get_object_or_404(UserModel, slug = slug)
+        masteruser_instance = get_object_or_404(MasterUserModel, user = user_instance)
+        return render(request,'masteruser/masteruserdetail.html',
+                      {'masteruser':masteruser_instance})
     else:
         return HttpResponseRedirect(reverse('login'))
