@@ -13,9 +13,10 @@ salons must have a pending filed that when a masteruser told them to change your
 doesn't see that salon in unpublished list
 
 
-url mapping for commonusers for seeing salon
+url mapping for commonusers to see salon list
 
-
+later when a sportclub or a salon is banned all booked money should return to their related users
+and inform them with a message or email
 
 delete migrations and makemigrations initially
 PYINSTALLER
@@ -54,31 +55,3 @@ git push --force-with-lease origin master\\\\\
 Restrict users to only see books created by them and published
 
 time model must be generated daily automatically for 1 year length
-
-
-
-
-
-
-useful method to deal with a specific object
-def detale_bajki(request, slug):
-	    detale_bajki = get_object_or_404(Wpisy, slug=slug)
-
-
-method for using function decorators on CBVs
-@method_decorator([login_required, sportclub_required], name='dispatch')
-
-{
-Every Profile Page must be protected with this for CBVs:
-restricting every user to be able to see only objects created by them:
-	def get_queryset(self):
-		if self.request.user.is_authenticated:
-			return Book.objects.filter(is_published=True, user=self.request.user)
-		else:
-			return Book.objects.none()
-
-and these for function views:
-
-sportclub = get_object_or_404(SportClubModel, slug=slug)
-	if sportclub == request.user.sportclubs:
-}

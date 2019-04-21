@@ -5,9 +5,9 @@
     <title></title>
   </head>
   <body>
-    <h1>SportClub Details</h1>
+    <h1>The related SportClub is Banned for some reason</h1>
     <p>
-
+      SportClub Details Are as follow:
       username: {{sportclub_detail.user.username}}<br>
       phone number: {{sportclub_detail.phone_number}}<br>
       address: {{sportclub_detail.address}}<br>
@@ -21,26 +21,15 @@
       {% else %}
       this sportclub has not entered his bank details.<br>
       {% endif %}
-
-      {% if sportclub_detail.user.is_active %}
-      This sportclub is active <br>
-      <p><a href="{% url 'sportclub:ban' slug=sportclub_detail.user.slug %}">BAN?</a> </p>
-      {% else %}
-      this sportclub is banned for some reason <br>
+    </p>
       <p><a href="{% url 'sportclub:unban' slug=sportclub_detail.user.slug %}">UNBAN?</a> </p>
-      <p><a href="{% url 'sportclub:delete' slug=sportclub_detail.user.slug %}">DELETE?</a> </p>
       in front some pop has to show for these
-      {% endif %}
 
       {% for salon in salons %}
       {{salon}}<br>
       <p>salon details: <a href="{% url 'salon:detail' pk=salon.pk %}">here</a> </p>
       <p>-----------------------------------------</p>
       {% endfor %}
-
-
-    </p>
-
 
   </body>
 </html>

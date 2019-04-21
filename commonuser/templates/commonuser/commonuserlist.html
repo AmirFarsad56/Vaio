@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+        <p>Here is the list of CommonUsers</p>
+        <p>
+        {% for commonuser in commonusers %}
+        {% if commonuser.user.is_active %}
+        {{ commonuser.user.username }}<br>
+        {{ commonuser.user.first_name }} {{commonuser.user.last_name}}
+        </p>
+        <p>commonuser details: <a href="{% url 'commonuser:detail' slug=commonuser.user.slug %}">here</a> </p>
+
+        <br>
+                <p>----------------------------------------------------</p><br>
+        {% endif %}
+        {% endfor %}
+
+
+  </body>
+</html>

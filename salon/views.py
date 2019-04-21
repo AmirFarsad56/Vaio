@@ -117,18 +117,18 @@ def SalonDeleteView(request,pk):
 def SalonConfirmView(request,pk):
     if request.user.is_masteruser:
         salon = get_object_or_404(SalonModel,pk = pk)
+        related_user = salon.sportclub.user
         if salon.sportclub.user.is_active:
             salon.confirm()
+            return HttpResponseRedirect(reverse('salon:detail',
+                                                kwargs={'pk':salon.pk}))
         else:
-            return HttpResponseRedirect(reverse('salon:bannedsportclub'))
-        return HttpResponseRedirect(reverse('salon:unconfirmedsalonlist'))
+            return HttpResponseRedirect(reverse('sportclub:bannedsportclubexception',
+                                                kwargs={'slug':related_user.username}))
+
     else:
         return HttpResponseRedirect(reverse('login'))
 
-
-@method_decorator([login_required, masteruser_required], name='dispatch')
-class BannedSportClubExceptionView(TemplateView):
-    template_name = 'salon/bannedsportclub.html'
 
 
 @login_required
@@ -137,7 +137,8 @@ def SalonBanView(request,pk):
     if request.user.is_masteruser:
         salon = get_object_or_404(SalonModel,pk = pk)
         salon.ban()
-        return HttpResponseRedirect(reverse('salon:confirmedsalonlist'))
+        return HttpResponseRedirect(reverse('salon:detail',
+                                            kwargs={'pk':salon.pk}))
     else:
         return HttpResponseRedirect(reverse('login'))
 

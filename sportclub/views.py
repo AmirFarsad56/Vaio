@@ -50,12 +50,10 @@ def SportClubSignupView(request):
                 if result['success']:
                      messages.success(request, 'ثبت نام با موفقیت انجام شد')
                      user = user_form.save(commit = False)#changed this if sth wrong happen ..
-
                      user.is_sportclub = True
                      user.save()
                      sportclub = sportclub_form.save(commit=False)
                      sportclub.user = user
-
                      if 'picture' in request.FILES:
                         sportclub.picture = request.FILES['picture']
 
@@ -112,6 +110,20 @@ def SportClubDetailView(request,slug):
 
 @login_required
 @masteruser_required
+def BannedSportClubExceptionView(request,slug):
+    if request.user.is_masteruser:
+        user_instance = get_object_or_404(UserModel, slug = slug)
+        sportclub_instance = get_object_or_404(SportClubModel, user = user_instance)
+        salon_instances = get_list_or_404(SalonModel, sportclub = sportclub_instance)
+        return render(request,'sportclub/bannedsportclubexception.html',
+                      {'sportclub_detail':sportclub_instance,
+                       'salons':salon_instances})
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+
+@login_required
+@masteruser_required
 def SportClubBanView(request,slug):
     if request.user.is_masteruser:
         user_instance = get_object_or_404(UserModel, slug = slug)
@@ -122,22 +134,11 @@ def SportClubBanView(request,slug):
         for salon_instance in salon_instances:
             salon_instance.is_confirmed = False
             salon_instance.save()
-        return HttpResponseRedirect(reverse('sportclub:list'))
+            ############################## change this to sportclub detail page
+        return HttpResponseRedirect(reverse("sportclub:detail",
+                                            kwargs={'slug':user_instance.slug}))
     else:
         return HttpResponseRedirect(reverse('login'))
-
-
-@login_required
-@masteruser_required
-def SportClubUnBanView(request,slug):
-    if request.user.is_masteruser:
-        user_instance = get_object_or_404(UserModel, slug = slug)
-        user_instance.is_active = False
-        user_instance.save()      
-        return HttpResponseRedirect(reverse('sportclub:list'))
-    else:
-        return HttpResponseRedirect(reverse('login'))
-
 
 
 @login_required
@@ -147,7 +148,9 @@ def SportClubUnBanView(request,slug):
         user_instance = get_object_or_404(UserModel, slug = slug)
         user_instance.is_active = True
         user_instance.save()
-        return HttpResponseRedirect(reverse('sportclub:list'))
+        ############################## change this to sportclub detail page
+        return HttpResponseRedirect(reverse("sportclub:detail",
+                                            kwargs={'slug':user_instance.slug}))
     else:
         return HttpResponseRedirect(reverse('login'))
 
@@ -160,7 +163,7 @@ def SportClubDeleteView(request,slug):
         user_instance = get_object_or_404(UserModel, slug = slug)
         sportclub_instance = get_object_or_404(SportClubModel, user = user_instance)
         sportclub_instance.delete()
-        user_instence.delete()
+        user_instance.delete()
         return HttpResponseRedirect(reverse('sportclub:bannedlist'))
     else:
         return HttpResponseRedirect(reverse('login'))

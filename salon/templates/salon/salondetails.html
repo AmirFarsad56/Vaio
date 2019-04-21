@@ -30,9 +30,11 @@
       {% for pic in salon_detail.pictures.all %}
       <p>Salon image: </p><img src="{{pic.picture.url}}" width="70" height="70"/><br>
       {% endfor %}
-      {% if salon.is_confirmed %}
+      {% if salon_detail.is_confirmed %}
+      this salon is confirmed and every body can see this <br>
       <p>ban salon from <a href="{% url 'salon:ban' pk=salon_detail.pk %}">here</a> </p>
       {% else %}
+      this salon isn't confirmed yet <br>
       <p>Confirm Salon From: <a href="{% url 'salon:confirm' pk=salon_detail.pk %}">here</a> </p>
       <p>DELETE Salon From: <a href="{% url 'salon:delete' pk=salon_detail.pk %}">here</a> </p>
       {% endif %}
