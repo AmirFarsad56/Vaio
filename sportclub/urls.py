@@ -3,7 +3,8 @@ from sportclub.views import (SportClubSignupView, SportClubProfileView,
                             SportClubListView, SportClubDetailView,
                             BannedSportClubListView, SportClubBanView,
                             SportClubDeleteView,SportClubUnBanView,
-                            BannedSportClubExceptionView)
+                            BannedSportClubExceptionView, MesssageSendingView,
+                            EmailSendingView,)
 from salon.views import SalonCreateView
 
 app_name ='sportclub'
@@ -18,6 +19,8 @@ urlpatterns = [
     path('delete/<slug:slug>/', SportClubDeleteView, name='delete'),
     path('salon/bannedsportclub/<slug:slug>',BannedSportClubExceptionView,
          name='bannedsportclubexception'),
+    path('sendsms/<slug:slug>/',MesssageSendingView, name='sendsms'),
+    path('sendemail/<slug:slug>/',EmailSendingView, name='sendemail'),
 
 
 ]

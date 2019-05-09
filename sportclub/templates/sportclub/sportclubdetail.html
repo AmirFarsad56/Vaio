@@ -31,7 +31,8 @@
       <p><a href="{% url 'sportclub:delete' slug=sportclub_detail.user.slug %}">DELETE?</a> </p>
       in front some pop has to show for these
       {% endif %}
-
+      <a href="{% url 'sportclub:sendsms' slug=sportclub_detail.user.slug %}">Send SMS?</a><br>
+      <a href="{% url 'sportclub:sendemail' slug=sportclub_detail.user.slug %}">Send EMAIL?</a><br>
       {% for salon in salons %}
       {{salon}}<br>
       <p>salon details: <a href="{% url 'salon:detail' pk=salon.pk %}">here</a> </p>

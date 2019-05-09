@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <h1>Sending Cloud Message</h1>
+    <form method="POST">
+      {% csrf_token %}
+      {{types_form}}
+      <br>
+      {{message_form}}
+
+      <input type="submit" value="Send">
+    </form>
+  </body>
+</html>

@@ -36,7 +36,10 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('username','email','date_joined')
     list_filter = ('is_commonuser','is_sportclub','is_superuser')
     fieldsets = (
-        ('Personal Info', {'fields': ('username','email', 'password','is_commonuser','is_sportclub')}),
+        ('Personal Info', {'fields': ('username','email', 'password',
+                                      'is_commonuser','is_sportclub',
+                                      'is_masteruser',)}),
+        ('Logs', {'fields': ('user_logs',)}),                              
         ('Date Info', {'fields': ('last_login','date_joined')}),
         ('Permissions', {'fields': ('is_active','is_superuser','is_staff')}),
     )

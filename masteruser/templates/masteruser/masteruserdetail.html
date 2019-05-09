@@ -19,5 +19,7 @@
     <a href="{% url 'masteruser:delete' slug=masteruser.user.slug %}">DELETE</a> user?<br>
     <a href="{% url 'masteruser:unban' slug=masteruser.user.slug %}">UnBan</a> user?<br>
 {% endif %}
+    <a href="{% url 'masteruser:sendsms' slug=masteruser.user.slug %}">Send SMS?</a><br>
+    <a href="{% url 'masteruser:sendemail' slug=masteruser.user.slug %}">Send EMAIL?</a><br>
   </body>
 </html>

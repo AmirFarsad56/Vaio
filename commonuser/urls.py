@@ -2,7 +2,8 @@ from django.urls import include, path
 from commonuser.views import (CommonUserSignupView, CommonUserProfileView,
                               CommonUserListView, CommonUserBanView,
                               CommonUserUnBanView, CommonUserDetailView,
-                              CommonUserDeleteView, BannedCommonUserListView)
+                              CommonUserDeleteView, BannedCommonUserListView,
+                              MesssageSendingView, EmailSendingView)
 
 app_name ='commonuser'
 urlpatterns = [
@@ -15,4 +16,7 @@ urlpatterns = [
     path('ban/<slug:slug>/', CommonUserBanView, name='ban'),
     path('unban/<slug:slug>/', CommonUserUnBanView, name='unban'),
     path('delete/<slug:slug>/', CommonUserDeleteView, name='delete'),
+    path('sendsms/<slug:slug>/',MesssageSendingView, name='sendsms'),
+    path('sendemail/<slug:slug>/',EmailSendingView, name='sendemail'),
+
 ]

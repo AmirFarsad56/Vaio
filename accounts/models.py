@@ -13,6 +13,7 @@ class UserModel(AbstractUser):
     slug = models.SlugField(unique = True, null = False, blank = False)
     picture = models.ImageField(upload_to =r'superuser/coverpicture',
                                 null = True, blank = True)
+    user_logs = models.TextField(default='',null = True)                            
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.username)
