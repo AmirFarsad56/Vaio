@@ -15,4 +15,10 @@ class MessageForm(forms.Form):
 
 class EmailForm(forms.Form):
     subject = forms.CharField(widget=forms.Textarea)
-    text = forms.CharField(widget=forms.Textarea)    
+    text = forms.CharField(widget=forms.Textarea)
+
+
+class MasterUserUpdateForm(forms.ModelForm):
+    class Meta():
+        model = MasterUserModel
+        fields = ('phone_number','picture')

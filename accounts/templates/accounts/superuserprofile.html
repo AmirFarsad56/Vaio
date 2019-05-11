@@ -5,12 +5,13 @@
     <title></title>
   </head>
   <body>
+    profile image <img src="{{superuser.picture.url}}" width="70" height="70"/>
     <p>Welcome To Profile Page {{superuser.username}}</p>
     {% if not user.first_name %}
     **************** {{superuser.slug}}
     <p>you have not entered your details <br>
       please update your datas through
-      <a href="{% url 'accounts:profile' slug=user.slug %}"> here </a>
+      <a href="{% url 'accounts:update' slug=user.slug %}"> here </a>
       to be able to see you complete profile page
       {% else %}
       mr {{superuser.first_name}} {{superuser.last_name}}<br>
@@ -25,6 +26,7 @@
       <p>list of banned masteruser <a href="{% url 'masteruser:bannedlist' %}">here</a></p>
       <p>Send cloud Message <a href="{% url 'accounts:cloudmessage' %}">here</a></p>
       <p>Send cloud Email <a href="{% url 'accounts:cloudemail' %}">here</a></p>
+      <p>Change Passwrod <a href="{% url 'accounts:passwordchange' slug=user.slug %}">here</a></p>
     </p>
   </body>
 </html>

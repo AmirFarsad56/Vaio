@@ -21,6 +21,8 @@
 <br>
 <p>list of <a href="{% url 'commonuser:list' %}">CommonUsers</a></p>
 <p>list of BANNED <a href="{% url 'commonuser:bannedlist' %}">CommonUsers</a></p>
+<p><a href="{% url 'masteruser:update' slug=user.slug %}">Update</a> Your Infos</p>
+<p>Change Passwrod <a href="{% url 'accounts:passwordchange' slug=user.slug %}">here</a></p>
 
   </body>
 </html>

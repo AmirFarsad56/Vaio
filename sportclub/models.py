@@ -11,6 +11,7 @@ class SportClubModel(models.Model):
     info = models.TextField(blank = True, null= True)
     picture = models.ImageField(default = r'sportclub/default/coverpicture.png',
                                  upload_to=r'sportclub/coverpicture')
+    terms_and_conditions = models.TextField(blank = True, null = True)                             
     bankaccount_ownername = models.CharField(max_length = 300, null = True, blank = True)
     bankaccount_accountnumber = models.CharField(max_length = 30, null = True, blank = True)
     bankaccount_cardnumber = models.CharField(max_length = 30, null = True, blank = True)
@@ -21,4 +22,3 @@ class SportClubModel(models.Model):
 
     def __str__(self):
         return self.user.username
-    

@@ -14,8 +14,8 @@ from django.utils import timezone
 from kavenegar import KavenegarAPI
 
 #handmade classes
-from commonuser.forms import CommonUserForm
-from accounts.forms import UserForm
+from commonuser.forms import CommonUserForm, CommonUserUpdateForm
+from accounts.forms import UserForm, UserUpdateForm
 from commonuser.models import CommonUserModel
 from accounts.models import UserModel
 from masteruser.decorators import masteruser_required
@@ -80,10 +80,12 @@ def CommonUserSignupView(request):
                            'registered':registered})
 
 
-class CommonUserProfileView(DetailView):
-    model = CommonUserModel
-    context_object_name = 'commonuser_detail'
-    template_name = 'commonuser/commonuserprofile.html'
+@login_required
+def CommonUserProfileView(request,slug):
+    user_instance = get_object_or_404(UserModel,slug = slug)
+    commonuser_instance = get_object_or_404(CommonUserModel, user = user_instance)
+    return render(request,'commonuser/commonuserprofile.html',
+                  {'commonuser_detail':commonuser_instance})
 
 
 @method_decorator([login_required, masteruser_required], name='dispatch')
@@ -118,8 +120,7 @@ def CommonUserBanView(request,slug):
         masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
         masteruser_instance_logs = masteruser_instance.user_logs
 
-        new_log = '''
-{previous_logs}\n
+        new_log = '''{previous_logs}\n
 On {date_time}:\n
 Banned CommonUser: {user}
 -------------------------------------------------------
@@ -145,8 +146,7 @@ def CommonUserUnBanView(request,slug):
         masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
         masteruser_instance_logs = masteruser_instance.user_logs
 
-        new_log = '''
-{previous_logs}\n
+        new_log = '''{previous_logs}\n
 On {date_time}:\n
 UnBanned CommonUser: {user}
 -------------------------------------------------------
@@ -171,8 +171,7 @@ def CommonUserDeleteView(request,slug):
         masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
         masteruser_instance_logs = masteruser_instance.user_logs
 
-        new_log = '''
-{previous_logs}\n
+        new_log = '''{previous_logs}\n
 On {date_time}:\n
 Deleted CommonUser: {user}
 -------------------------------------------------------
@@ -215,10 +214,9 @@ def MesssageSendingView(request,slug):
 
                 masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
                 masteruser_instance_logs = masteruser_instance.user_logs
-                new_log = '''
-{previous_logs}\n
+                new_log = '''{previous_logs}\n
 On {date_time}:\n
-SENT A MESSAGE TO: {user} (Common User)\n
+Sent a message to: {user} (Common User)\n
 Message:\n
 {message}
 -------------------------------------------------------
@@ -258,10 +256,9 @@ def EmailSendingView(request,slug):
                 )
                 masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
                 masteruser_instance_logs = masteruser_instance.user_logs
-                new_log = '''
-{previous_logs}\n
+                new_log = '''{previous_logs}\n
 On {date_time}:\n
-SENT AN EMAIL TO: {user} (Common User)\n
+Sent an Email to: {user} (Common User)\n
 Email Subject:
 {subject}\n
 Email Text:\n
@@ -281,3 +278,22 @@ Email Text:\n
 
             return render(request,'commonuser/emailform.html',
                                   {'form':email_form,})
+
+
+@login_required
+def CommonUserUpdateView(request,slug):
+    commonuser_user = get_object_or_404(UserModel,slug = slug)
+    user_update_form = UserUpdateForm(request.POST or None, instance = commonuser_user)
+    commonuser = get_object_or_404(CommonUserModel, user = commonuser_user)
+    commonuser_update_form = CommonUserUpdateForm(request.POST or None, instance = commonuser)
+    if commonuser_update_form.is_valid() and user_update_form.is_valid():
+        user_update_form.save()
+        commonuser_update_form.save()
+        if 'picture' in request.FILES:
+           commonuser.picture = request.FILES['picture']
+           commonuser.save()
+        return HttpResponseRedirect(reverse('commonuser:profile',
+                                    kwargs={'slug':commonuser_user.slug}))
+    return render(request,'commonuser/commonuserupdate.html',
+                          {'commonuserform':commonuser_update_form,
+                           'userform':user_update_form,})

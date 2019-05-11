@@ -29,3 +29,28 @@ class MessageForm(forms.Form):
 class EmailForm(forms.Form):
     subject = forms.CharField(widget=forms.Textarea)
     text = forms.CharField(widget=forms.Textarea)
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta():
+        model = UserModel
+        fields = ('first_name','last_name','email',)
+
+
+class SuperUserUpdateForm(forms.ModelForm):
+    class Meta():
+        model = UserModel
+        fields = ('first_name','last_name','email','picture')
+
+
+class PasswordChangeForm(forms.Form):
+    current_password = forms.CharField(widget=forms.PasswordInput())
+    new_password = forms.CharField(widget=forms.PasswordInput())
+    confirm_password = forms.CharField(widget=forms.PasswordInput())
+
+    def clean(value):
+        all_clean_data = super().clean()
+        n1 = all_clean_data['new_password']
+        n2 = all_clean_data['confirm_password']
+        if n1 != n2:
+            raise forms.ValidationError("passwords don't match")

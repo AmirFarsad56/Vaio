@@ -5,11 +5,9 @@
     <title></title>
   </head>
   <body>
-    <h1>Update Ypur Profile Datas:</h1>
-<form enctype="multipart/form-data" method="POST">
+<form method="POST">
   {% csrf_token %}
-  {{userform.as_p}}
-  {{commonuserform.as_p}}
+  {{bankinfoform.as_p}}
   <input type="submit" value="OK">
 </form>
   </body>

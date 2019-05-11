@@ -73,3 +73,10 @@ if user is not None:
 				error2 ='کلمه عبور باید نمیتواند شامل نام کاربری باشد'
 				error3 ='کلمه عبور نمیتواند خیلی ساده باشد'
 				return render(request,'accounts/rp_2.html',{'form':form,'error1':error1,'error2':error2,'error3':error3})
+--------------------------------------------------------------------------------------
+updating datas via Functions
+def func(request, id):
+    object = Model.objects.get(id=id)
+    form = ModelForm(instance=object)
+
+    return render(request, 'my_template.html', {'form':form})

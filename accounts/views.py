@@ -8,11 +8,14 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.contrib.auth.password_validation import validate_password, MinimumLengthValidator
+from django.contrib.auth import authenticate, login
 
 #handmade
 from accounts.models import UserModel
 from accounts.decorators import superuser_required
-from accounts.forms import EmailForm, MessageForm, TypesForm
+from accounts.forms import (EmailForm, MessageForm, TypesForm,
+                            SuperUserUpdateForm, PasswordChangeForm)
 from commonuser.models import CommonUserModel
 from sportclub.models import SportClubModel
 from masteruser.models import MasterUserModel
@@ -33,20 +36,6 @@ class SuperUserProfileView(DetailView):
 
     def get_queryset(self):
         return UserModel.objects.filter(username = self.request.user.username )
-
-
-@method_decorator([login_required, superuser_required], name='dispatch')
-class SuperUserUpdateView(UpdateView):
-    model = UserModel
-    fields = ('first_name','last_name','picture','email')
-    template_name = 'accounts/superuserupdate.html'
-
-    def get_queryset(self):
-        return UserModel.objects.filter(username = self.request.user.username )
-
-    def get_success_url(self):
-        slug = self.kwargs['slug']
-        return reverse("accounts:profile", kwargs={'slug': slug})
 
 
 @login_required
@@ -102,8 +91,7 @@ def CloudMessageView(request):
                     to += 'Sport Clubs '
                 if masterusers:
                     to += 'Master Users '
-                new_log = '''
-{previous_logs}\n
+                new_log = '''{previous_logs}\n
 On {date_time}:\n
 Sent Cloud Message To: {to}\n
 Message:\n
@@ -176,8 +164,7 @@ def CloudEmailView(request):
                     to += 'Sport Clubs '
                 if masterusers:
                     to += 'Master Users '
-                new_log = '''
-{previous_logs}\n
+                new_log = '''{previous_logs}\n
 On {date_time}:\n
 Sent Cloud Email To: {to}\n
 Email Subject:
@@ -201,3 +188,61 @@ Email Text:\n
             return render(request,'accounts/cloudemail.html',
                                   {'email_form':email_form,
                                    'types_form':types_form})
+
+
+@login_required
+@superuser_required
+def SuperUserUpdateView(request,slug):
+    superuser_user = get_object_or_404(UserModel,slug = slug)
+    user_update_form = SuperUserUpdateForm(request.POST or None, instance = superuser_user)
+    if user_update_form.is_valid():
+        user_update_form.save()
+        if 'picture' in request.FILES:
+           superuser_user.picture = request.FILES['picture']
+           superuser_user.save()
+        return HttpResponseRedirect(reverse('accounts:profile',
+                                    kwargs={'slug':superuser_user.slug}))
+    return render(request,'accounts/superuserupdate.html',
+                          {'userform':user_update_form,})
+
+
+@login_required
+def PasswordChangeView(request,slug):
+    user = get_object_or_404(UserModel,slug = slug)
+    if request.method == 'POST':
+        password_form = PasswordChangeForm(data = request.POST)
+        if password_form.is_valid():
+            current_password = password_form.cleaned_data.get('current_password')
+            logged_in = authenticate(request, username=user.username, password=current_password)
+
+            if logged_in is not None:
+                new_password = password_form.cleaned_data.get('new_password')
+                try:
+                    validate_password(new_password,user=user, password_validators=None)
+                    user.set_password(new_password)
+                    user.save()
+                    if user.is_superuser:
+                        return HttpResponseRedirect(reverse('accounts:profile',
+                                                    kwargs={'slug':user.slug}))
+                    if user.is_masteruser:
+                        return HttpResponseRedirect(reverse('masteruser:profile',
+                                                    kwargs={'slug':user.slug}))
+                    if user.is_sportclub:
+                        return HttpResponseRedirect(reverse('sportclub:profile',
+                                                    kwargs={'slug':user.slug}))
+                    if user.is_commonuser:
+                        return HttpResponseRedirect(reverse('commonuser:profile',
+                                                    kwargs={'slug':user.slug}))
+                except:
+                    error1 ='کلمه عبور باید بیش از 6 کاراکتر باشد'
+                    error2 ='کلمه عبور باید نمیتواند شامل نام کاربری باشد'
+                    error3 ='کلمه عبور نمیتواند خیلی ساده باشد'
+                    return render(request,'accounts/passwordchange.html',{'form':password_form,'error1':error1,'error2':error2,'error3':error3})
+            else:
+                error4 = 'رمزعبور وارد شده صحیح نیست'
+                return  render(request,'accounts/passwordchange.html',
+                                      {'error4':error4})
+    else:
+        password_form = PasswordChangeForm()
+        return  render(request,'accounts/passwordchange.html',
+                              {'form':password_form})

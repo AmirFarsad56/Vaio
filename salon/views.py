@@ -6,6 +6,7 @@ from django.views.generic import UpdateView, DetailView, ListView, TemplateView
 from django.forms import modelformset_factory
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 #handmade
 from accounts.models import UserModel
@@ -71,9 +72,30 @@ class SalonUpdateView(UpdateView):
     fields = '__all__'
     template_name = 'salon/updatesalon.html'
 
-
     def get_queryset(self):
         return SalonModel.objects.filter(sportclub = self.request.user.sportclubs)
+
+
+@login_required
+@sportclub_required
+def SalonUpdateView(request,slug,pk):
+    sportclub_user = get_object_or_404(UserModel, slug = slug)
+    sportclub = get_object_or_404(SportClubModel, user = sportclub_user)
+    salon = get_object_or_404(SalonModel, pk = pk)
+    if salon.sportclub == sportclub:
+
+        salon_update_form = SalonForm(request.POST or None, instance = salon)
+        if salon_update_form.is_valid():
+            salon_update_form.save()
+            salon.is_confirmed = False
+            salon.save()
+            return HttpResponseRedirect(reverse('salon:salondetail',
+                                        kwargs={'slug':slug,'pk':pk}))
+        return render(request,'salon/updatesalon.html',
+                              {'form':salon_update_form,})
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
 
 
 
@@ -106,6 +128,20 @@ class UnConfirmedSalonListView(ListView):
 def SalonDeleteView(request,pk):
     if request.user.is_masteruser:
         salon = get_object_or_404(SalonModel,pk = pk)
+        masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
+        masteruser_instance_logs = masteruser_instance.user_logs
+
+        new_log = '''{previous_logs}\n
+On {date_time}:\n
+Deleted Salon: {salon}
+Related to Sport Club: {sportclub}
+-------------------------------------------------------
+        '''.format(previous_logs = masteruser_instance_logs,
+                   date_time = timezone.localtime(timezone.now()),
+                    salon = str(salon),
+                    sportclub = str(salon.sportclub.user.username))
+        masteruser_instance.user_logs = new_log
+        masteruser_instance.save()
         salon.delete()
         return HttpResponseRedirect(reverse('salon:unconfirmedsalonlist'))
     else:
@@ -120,6 +156,20 @@ def SalonConfirmView(request,pk):
         related_user = salon.sportclub.user
         if salon.sportclub.user.is_active:
             salon.confirm()
+            masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
+            masteruser_instance_logs = masteruser_instance.user_logs
+
+            new_log = '''{previous_logs}\n
+On {date_time}:\n
+Confirmed Salon: {salon}
+Related to Sport Club: {sportclub}
+-------------------------------------------------------
+            '''.format(previous_logs = masteruser_instance_logs,
+                       date_time = timezone.localtime(timezone.now()),
+                        salon = str(salon),
+                        sportclub = str(salon.sportclub.user.username))
+            masteruser_instance.user_logs = new_log
+            masteruser_instance.save()
             return HttpResponseRedirect(reverse('salon:detail',
                                                 kwargs={'pk':salon.pk}))
         else:
@@ -137,6 +187,20 @@ def SalonBanView(request,pk):
     if request.user.is_masteruser:
         salon = get_object_or_404(SalonModel,pk = pk)
         salon.ban()
+        masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
+        masteruser_instance_logs = masteruser_instance.user_logs
+
+        new_log = '''{previous_logs}\n
+On {date_time}:\n
+Banned Salon: {salon}
+Related to Sport Club: {sportclub}
+-------------------------------------------------------
+        '''.format(previous_logs = masteruser_instance_logs,
+                   date_time = timezone.localtime(timezone.now()),
+                    salon = str(salon),
+                    sportclub = str(salon.sportclub.user.username))
+        masteruser_instance.user_logs = new_log
+        masteruser_instance.save()
         return HttpResponseRedirect(reverse('salon:detail',
                                             kwargs={'pk':salon.pk}))
     else:

@@ -17,13 +17,13 @@ from django.utils import timezone
 from kavenegar import KavenegarAPI
 
 #handmade
-from accounts.forms import UserForm
+from accounts.forms import UserForm, UserUpdateForm
 from accounts.models import UserModel
 from accounts.decorators import superuser_required
 from masteruser.decorators import masteruser_required
 from masteruser.forms import MasterUserForm
 from masteruser.models import MasterUserModel
-from masteruser.forms import MessageForm, EmailForm
+from masteruser.forms import MessageForm, EmailForm, MasterUserUpdateForm
 
 #recaptcha
 import json
@@ -67,11 +67,10 @@ def MasterUserSignupView(request):
                      superuser_instance = get_object_or_404(UserModel, slug = request.user.slug)
                      superuser_instance_logs = superuser_instance.user_logs
 
-                     new_log = '''
-             {previous_logs}\n
-             On {date_time}:\n
-             Created Masteruser: {user}
-             -------------------------------------------------------
+                     new_log = '''{previous_logs}\n
+On {date_time}:\n
+Created Masteruser: {user}
+-------------------------------------------------------
                      '''.format(previous_logs = superuser_instance_logs,
                                 date_time = timezone.localtime(timezone.now()),
                                  user = str(user.username),)
@@ -133,8 +132,7 @@ def MasterUserBanView(request,slug):
         superuser_instance = get_object_or_404(UserModel, slug = request.user.slug)
         superuser_instance_logs = superuser_instance.user_logs
 
-        new_log = '''
-{previous_logs}\n
+        new_log = '''{previous_logs}\n
 On {date_time}:\n
 Banned Masteruser: {user}
 -------------------------------------------------------
@@ -159,8 +157,7 @@ def MasterUserUnBanView(request,slug):
         superuser_instance = get_object_or_404(UserModel, slug = request.user.slug)
         superuser_instance_logs = superuser_instance.user_logs
 
-        new_log = '''
-{previous_logs}\n
+        new_log = '''{previous_logs}\n
 On {date_time}:\n
 UnBanned Masteruser: {user}
 -------------------------------------------------------
@@ -185,8 +182,7 @@ def MasterUserDeleteView(request,slug):
         superuser_instance = get_object_or_404(UserModel, slug = request.user.slug)
         superuser_instance_logs = superuser_instance.user_logs
 
-        new_log = '''
-{previous_logs}\n
+        new_log = '''{previous_logs}\n
 On {date_time}:\n
 Deleted Masteruser: {user}
 -------------------------------------------------------
@@ -234,28 +230,16 @@ def MesssageSendingView(request,slug):
 
                 superuser_instance = get_object_or_404(UserModel, slug = request.user.slug)
                 superuser_instance_logs = superuser_instance.user_logs
-                if superuser_instance_logs:
-                    new_log = '''
-{previous_logs}\n
+                new_log = '''{previous_logs}\n
 On {date_time}:\n
 SENT A MESSAGE TO: {user} (Master User)\n
 Message:\n
 {message}
 -------------------------------------------------------
-                    '''.format(previous_logs = superuser_instance_logs,
-                               date_time = timezone.localtime(timezone.now()),
-                                user = str(masteruser_instance.user.username),
-                                message = str(message_text),)
-                else:
-                    new_log = '''
-On {date_time}:\n
-SENT A MESSAGE TO: {user} (Master User)\n
-Message:\n
-{message}
--------------------------------------------------------
-                    '''.format(date_time = timezone.localtime(timezone.now()),
-                                user = str(masteruser_instance.user.username),
-                                message = str(message_text),)
+                '''.format(previous_logs = superuser_instance_logs,
+                           date_time = timezone.localtime(timezone.now()),
+                            user = str(masteruser_instance.user.username),
+                            message = str(message_text),)
                 superuser_instance.user_logs = new_log
                 superuser_instance.save()
                 return HttpResponseRedirect(reverse('masteruser:detail',
@@ -287,9 +271,7 @@ def EmailSendingView(request,slug):
                 )
                 superuser_instance = get_object_or_404(UserModel, slug = request.user.slug)
                 superuser_instance_logs = superuser_instance.user_logs
-                if superuser_instance_logs:
-                    new_log = '''
-{previous_logs}\n
+                new_log = '''{previous_logs}\n
 On {date_time}:\n
 SENT A MESSAGE TO: {user} (Master User)\n
 Email Subject:
@@ -297,24 +279,11 @@ Email Subject:
 Email Text:\n
 {text}
 -------------------------------------------------------
-                    '''.format(previous_logs = superuser_instance_logs,
-                               date_time = timezone.localtime(timezone.now()),
-                                user = str(masteruser_instance.user.username),
-                                subject = str(email_subject),
-                                text = str(email_text),)
-                else:
-                    new_log = '''
-On {date_time}:\n
-SENT A MESSAGE TO: {user} (Master User)\n
-Email Subject:
-{subject}\n
-Email Text:\n
-{text}
--------------------------------------------------------
-                    '''.format(date_time = timezone.localtime(timezone.now()),
-                                user = str(masteruser_instance.user.username),
-                                subject = str(email_subject),
-                                text = str(email_text),)
+                '''.format(previous_logs = superuser_instance_logs,
+                           date_time = timezone.localtime(timezone.now()),
+                            user = str(masteruser_instance.user.username),
+                            subject = str(email_subject),
+                            text = str(email_text),)
                 superuser_instance.user_logs = new_log
                 superuser_instance.save()
                 return HttpResponseRedirect(reverse('masteruser:detail',
@@ -324,3 +293,23 @@ Email Text:\n
 
             return render(request,'masteruser/emailform.html',
                                   {'form':email_form,})
+
+
+@login_required
+@masteruser_required
+def MasterUserUpdateView(request,slug):
+    masteruser_user = get_object_or_404(UserModel,slug = slug)
+    user_update_form = UserUpdateForm(request.POST or None, instance = masteruser_user)
+    masteruser = get_object_or_404(MasterUserModel, user = masteruser_user)
+    masteruser_update_form = MasterUserUpdateForm(request.POST or None, instance = masteruser)
+    if masteruser_update_form.is_valid() and user_update_form.is_valid():
+        user_update_form.save()
+        masteruser_update_form.save()
+        if 'picture' in request.FILES:
+           masteruser.picture = request.FILES['picture']
+           masteruser.save()
+        return HttpResponseRedirect(reverse('masteruser:profile',
+                                    kwargs={'slug':masteruser_user.slug}))
+    return render(request,'masteruser/masteruserupdate.html',
+                          {'masteruserform':masteruser_update_form,
+                           'userform':user_update_form,})

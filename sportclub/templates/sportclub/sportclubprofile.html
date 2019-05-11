@@ -13,6 +13,7 @@
     address: {{ sportclub_detail.address}}<br>
     more info: {{ sportclub_detail.info}}<br>
     slug: {{sportclub_detail.slug}}<br>
+    bank: {{ sportclub_detail.bankaccount_bankname}}<br>
     sportclub image: <img src="{{sportclub_detail.picture.url}}" width="70" height="70"/><br>
     Add a Salon
     <a href="{% url 'salon:createsalon' slug=user.slug %}">
@@ -30,12 +31,15 @@
     <li>shower: {{salon.shower}}<br></li>
     </ul>
     Update Datas?<br>
-    <a href="{% url 'salon:updatesalon' slug=user.slug pk=salon.pk %}"> Yes </a><br>
+    <a href="{% url 'salon:update' slug=user.slug pk=salon.pk %}"> Yes </a><br>
     <a href="{% url 'salon:salondetail' slug=user.slug pk=salon.pk %}"> Details </a><br>
     -------------------------------------------<br>
     {% endfor %}
     {% endif %}
-
+    <p><a href="{% url 'sportclub:bankinfochange' slug=user.slug %}">Change</a> Bank Account Infos</p>
+    <p><a href="{% url 'sportclub:update' slug=user.slug %}">Update</a> Your Infos</p>
+    <p>Change Passwrod <a href="{% url 'accounts:passwordchange' slug=user.slug %}">here</a></p>
+    <p>Add your terms and conditions <a href="{% url 'sportclub:termsandconditions' slug=user.slug %}">here</a></p>
     </p>
     </p>
   </body>

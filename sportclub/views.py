@@ -10,20 +10,18 @@ from django.core.mail import send_mail
 from django.utils import timezone
 
 #SMS send
-from django.utils import timezone
 from kavenegar import KavenegarAPI
 
 #handmade classes
 from accounts.models import UserModel
-from sportclub.forms import SportClubForm
-from accounts.forms import UserForm
+from sportclub.forms import SportClubForm, TermsAndConditionsForm
+from accounts.forms import UserForm, UserUpdateForm
 from sportclub.models import SportClubModel
 from accounts.models import UserModel
 from salon.models import SalonModel
 from sportclub.decorators import sportclub_required
 from masteruser.decorators import masteruser_required
-from sportclub.forms import MessageForm, EmailForm
-
+from sportclub.forms import MessageForm, EmailForm, BankInfoForm, SportClubUpdateForm
 
 #recaptcha
 import json
@@ -68,10 +66,9 @@ def SportClubSignupView(request):
                      masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
                      masteruser_instance_logs = masteruser_instance.user_logs
 
-                     new_log = '''
- {previous_logs}\n
+                     new_log = '''{previous_logs}\n
  On {date_time}:\n
- Created a new SportClub: {sportclub}
+ Created SportClub: {sportclub}
  -------------------------------------------------------
                      '''.format(previous_logs = masteruser_instance_logs,
                                 date_time = timezone.localtime(timezone.now()),
@@ -161,8 +158,7 @@ def SportClubBanView(request,slug):
         masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
         masteruser_instance_logs = masteruser_instance.user_logs
 
-        new_log = '''
-{previous_logs}\n
+        new_log = '''{previous_logs}\n
 On {date_time}:\n
 Banned Sportclub: {user}
 -------------------------------------------------------
@@ -187,8 +183,7 @@ def SportClubUnBanView(request,slug):
         masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
         masteruser_instance_logs = masteruser_instance.user_logs
 
-        new_log = '''
-{previous_logs}\n
+        new_log = '''{previous_logs}\n
 On {date_time}:\n
 UnBanned Sportclub: {user}
 -------------------------------------------------------
@@ -214,8 +209,7 @@ def SportClubDeleteView(request,slug):
         masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
         masteruser_instance_logs = masteruser_instance.user_logs
 
-        new_log = '''
-{previous_logs}\n
+        new_log = '''{previous_logs}\n
 On {date_time}:\n
 Deleted Sportclub: {user}
 -------------------------------------------------------
@@ -258,28 +252,16 @@ def MesssageSendingView(request,slug):
 
                 masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
                 masteruser_instance_logs = masteruser_instance.user_logs
-                if masteruser_instance_logs:
-                    new_log = '''
-{previous_logs}\n
+                new_log = '''{previous_logs}\n
 On {date_time}:\n
-SENT A MESSAGE TO: {user} (Sport Club)\n
+Sent a Message to: {user} (Sport Club)\n
 Message:\n
 {message}
 -------------------------------------------------------
-                    '''.format(previous_logs = masteruser_instance_logs,
-                               date_time = timezone.localtime(timezone.now()),
-                                user = str(sportclub_instance.user.username),
-                                message = str(message_text),)
-                else:
-                    new_log = '''
-On {date_time}:\n
-SENT A MESSAGE TO: {user} (Sport Club)\n
-Message:\n
-{message}
--------------------------------------------------------
-                    '''.format(date_time = timezone.localtime(timezone.now()),
-                                user = str(sportclub_instance.user.username),
-                                message = str(message_text),)
+                '''.format(previous_logs = masteruser_instance_logs,
+                           date_time = timezone.localtime(timezone.now()),
+                            user = str(sportclub_instance.user.username),
+                            message = str(message_text),)
                 masteruser_instance.user_logs = new_log
                 masteruser_instance.save()
                 return HttpResponseRedirect(reverse('sportclub:detail',
@@ -311,34 +293,19 @@ def EmailSendingView(request,slug):
                 )
                 masteruser_instance = get_object_or_404(UserModel, slug = request.user.slug)
                 masteruser_instance_logs = masteruser_instance.user_logs
-                if masteruser_instance_logs:
-                    new_log = '''
-{previous_logs}\n
+                new_log = '''{previous_logs}\n
 On {date_time}:\n
-SENT AN EMAIL TO: {user} (Sport Club)\n
+Sent an Email to: {user} (Sport Club)\n
 Email Subject:
 {subject}\n
 Email Text:\n
 {text}
 -------------------------------------------------------
-                    '''.format(previous_logs = masteruser_instance_logs,
-                               date_time = timezone.localtime(timezone.now()),
-                                user = str(sportclub_instance.user.username),
-                                subject = str(email_subject),
-                                text = str(email_text),)
-                else:
-                    new_log = '''
-On {date_time}:\n
-SENT A MESSAGE TO: {user} (Sport Club)\n
-Email Subject:
-{subject}\n
-Email Text:\n
-{text}
--------------------------------------------------------
-                    '''.format(date_time = timezone.localtime(timezone.now()),
-                                user = str(sportclub_instance.user.username),
-                                subject = str(email_subject),
-                                text = str(email_text),)
+                '''.format(previous_logs = masteruser_instance_logs,
+                           date_time = timezone.localtime(timezone.now()),
+                            user = str(sportclub_instance.user.username),
+                            subject = str(email_subject),
+                            text = str(email_text),)
                 masteruser_instance.user_logs = new_log
                 masteruser_instance.save()
                 return HttpResponseRedirect(reverse('sportclub:detail',
@@ -348,3 +315,51 @@ Email Text:\n
 
             return render(request,'sportclub/emailform.html',
                                   {'form':email_form,})
+
+
+@login_required
+@sportclub_required
+def BankInfoChangeView(request,slug):
+    sportclub_user = get_object_or_404(UserModel,slug = slug)
+    sportclub = get_object_or_404(SportClubModel,user = sportclub_user)
+    bank_info_form = BankInfoForm(request.POST or None, instance = sportclub)
+    if bank_info_form.is_valid():
+        bank_info_form.save()
+        return HttpResponseRedirect(reverse('sportclub:profile',
+                                    kwargs={'slug':sportclub_user.slug}))
+    return render(request,'sportclub/bankinfochange.html',
+                          {'bankinfoform':bank_info_form,})
+
+
+@login_required
+@sportclub_required
+def SportClubUpdateView(request,slug):
+    sportclub_user = get_object_or_404(UserModel,slug = slug)
+    user_update_form = UserUpdateForm(request.POST or None, instance = sportclub_user)
+    sportclub = get_object_or_404(SportClubModel,user = sportclub_user)
+    sportclub_update_form = SportClubUpdateForm(request.POST or None, instance = sportclub)
+    if user_update_form.is_valid() and sportclub_update_form.is_valid():
+        user_update_form.save()
+        sportclub_update_form.save()
+        if 'picture' in request.FILES:
+           sportclub.picture = request.FILES['picture']
+           sportclub.save()
+        return HttpResponseRedirect(reverse('sportclub:profile',
+                                    kwargs={'slug':sportclub_user.slug}))
+    return render(request,'sportclub/sportclubupdate.html',
+                          {'sportclubform':sportclub_update_form,
+                           'userform':user_update_form,})
+
+
+@login_required
+@sportclub_required
+def TermsAndConditionsView(request,slug):
+    sportclub_user = get_object_or_404(UserModel,slug = slug)
+    sportclub = get_object_or_404(SportClubModel,user = sportclub_user)
+    terms_and_conditions_form = TermsAndConditionsForm(request.POST or None, instance = sportclub)
+    if terms_and_conditions_form.is_valid():
+        terms_and_conditions_form.save()
+        return HttpResponseRedirect(reverse('sportclub:profile',
+                                    kwargs={'slug':sportclub_user.slug}))
+    return render(request,'sportclub/termsandconditions.html',
+                          {'form':terms_and_conditions_form,})

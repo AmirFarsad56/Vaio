@@ -3,7 +3,8 @@ from masteruser.views import (MasterUserSignupView, MasterUserListView,
                               MasterUserBanView,MasterUserUnBanView,
                               MasterUserDeleteView,MasterUserProfileView,
                               BannedMasterUserListView, MasterUserDetailView,
-                              MesssageSendingView, EmailSendingView)
+                              MesssageSendingView, EmailSendingView,
+                              MasterUserUpdateView)
 
 app_name ='masteruser'
 urlpatterns = [
@@ -17,5 +18,6 @@ urlpatterns = [
     path('detail/<slug:slug>/',MasterUserDetailView, name='detail'),
     path('sendsms/<slug:slug>/',MesssageSendingView, name='sendsms'),
     path('sendemail/<slug:slug>/',EmailSendingView, name='sendemail'),
+    path('update/<slug:slug>/', MasterUserUpdateView, name='update'),
 
 ]
