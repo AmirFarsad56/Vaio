@@ -13,7 +13,7 @@ urlpatterns = [
     path('unconfirmedsalonlist/',UnConfirmedSalonListView.as_view(),
         name='unconfirmedsalonlist'),
     path('sportclub/profile/<slug:slug>/updatesalon/<int:pk>/',SalonUpdateView, name='update'),
-    path('sportclub/profile/<slug:slug>/salondetail/<int:pk>/',SalonDetailView.as_view(), name='salondetail'),
+    path('sportclub/profile/salondetail/<int:pk>/',SalonDetailView.as_view(), name='salondetail'),
     path('salon/confirm/<int:pk>/',SalonConfirmView, name='confirm'),
     path('salon/delete/<int:pk>/',SalonDeleteView, name='delete'),
     path('salon/ban/<int:pk>/',SalonBanView, name='ban'),

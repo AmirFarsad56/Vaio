@@ -8,5 +8,5 @@ Modules
 		pip install django[argon2]
 	pillow
 		pip install pillow
-
-	
+		pip install django_jalali
+		pip install

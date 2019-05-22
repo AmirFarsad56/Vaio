@@ -27,6 +27,7 @@ urlpatterns = [
     path('sportclub/', include('sportclub.urls',namespace = 'sportclub')),
     path('masteruser/', include('masteruser.urls',namespace = 'masteruser')),
     path('',include('salon.urls',namespace = 'salon')),
+    path('session/', include('session.urls',namespace = 'session')),
     #path('accounts/',include('accounts.urls', namespace = 'accounts')),
     path('',IndexView.as_view(),name = 'index'),
     path('',include('django.contrib.auth.urls')),

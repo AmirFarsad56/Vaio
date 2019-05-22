@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    {% for session in sessions%}
+    {{session.day}}<br>
+    {{session.time}}<br>
+    <p>----------------------------</p>
+    {% endfor %}
+
+  </body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+    <form id='days_form' method="POST">
+      {{days_form.as_p}}
+        {{times_form.as_p}}
+      {% csrf_token %}
+    <input type='submit' name='days_form' value='Form 1' />
+</form>
+
+  </body>
+</html>

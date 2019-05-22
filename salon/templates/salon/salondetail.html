@@ -5,7 +5,7 @@
     <title></title>
   </head>
   <body>
-    <p>this is the details of the salon:</p>
+    <p>this is the details of your salon:</p>
     <p>
     Area: {{salon_detail.area}}<br>
     Floor Type{{salon_detail.floor_type}}<br>
@@ -30,6 +30,10 @@
     <p>Salon image: </p><img src="{{pic.picture.url}}" width="70" height="70"/><br>
     {% endfor %}
     <p>update salon from <a href="{% url 'salon:update' slug=user.slug pk=salon_detail.pk %}">here</a></p>
+    <p><a href="{% url 'session:create' pk=salon_detail.pk %}">create</a> Sessions form this salon</p>
+    {% if salon_detail.sessions.all %}
+    <p><a href="{% url 'session:list' pk=salon_detail.pk %}">List</a> of your sessions</p>
+    {% endif %}
 
 
   </body>
