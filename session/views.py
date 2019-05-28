@@ -7,10 +7,11 @@ from django.contrib.auth.decorators import login_required
 import jdatetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from jdatetime import date
 
 #handmade
 from session.forms import DaysForm, TimesForm
-from session.models import SessionModel
+from session.models import SessionModel, LastDataModel
 from salon.models import SalonModel
 from sportclub.decorators import sportclub_required
 from session.datetimetools import (AllSaturdays, AllSundays, AllMondays,
@@ -21,12 +22,19 @@ from session.datetimetools import (AllSaturdays, AllSundays, AllMondays,
 @login_required
 @sportclub_required
 def SessionCreateView(request, pk):
+    salon_instance = get_object_or_404(SalonModel, pk = pk)
+    try:
+        lastdata_instance = get_object_or_404(LastDataModel, salon = salon_instance)
+    except:
+        lastdata_instance = LastDataModel.objects.create(salon=salon_instance)
     if request.method == 'POST':
         days_form = DaysForm(data = request.POST )
         times_form = TimesForm(data = request.POST )
         if times_form.is_valid() and days_form.is_valid():
-            salon_instance = get_object_or_404(SalonModel, pk = pk)
-            length = days_form.cleaned_data['length']
+            if lastdata_instance.last_length:
+                length = lastdata_instance.last_length
+            else:
+                length = days_form.cleaned_data['length']
             saturdays = days_form.cleaned_data['saturdays']
             sundays = days_form.cleaned_data['sundays']
             mondays = days_form.cleaned_data['mondays']
@@ -37,107 +45,181 @@ def SessionCreateView(request, pk):
             start_time = times_form.cleaned_data['start_time']
             duration = times_form.cleaned_data['duration']
             stop_time = times_form.cleaned_data['stop_time']
-            print(duration)
+
             x = int(( TotalMinutes(stop_time) - TotalMinutes(start_time) ) / TotalMinutes(duration))
 
+
             if saturdays:
-                for days in AllSaturdays(length):
+                if lastdata_instance.last_saturday_2:
+                    begining_day = lastdata_instance.last_saturday_2 + timedelta(days=1)
+                else:
+                    begining_day = jdatetime.datetime.now()
+                goal_num = len(list(AllSaturdays(length, begining_day)))
+                counter_1 = 0
+                for days in AllSaturdays(length, begining_day):
+                    counter_1 += 1
                     for i in range(x):
                         total_minutes = TotalMinutes(start_time) + i*TotalMinutes(duration)
                         hours = int(total_minutes/60)
                         minutes = total_minutes - (hours * 60)
                         time = str(hours)+':'+str(minutes)
-                        print(minutes)
+
                         session = SessionModel.objects.create(salon=salon_instance, duration=duration,
                                                     day = str(days), time = time)
                         session.save()
+                    if counter_1 == goal_num:
+                        lastdata_instance.last_length = length
+                        lastdata_instance.last_saturday = days
+                        lastdata_instance.save()
             if sundays:
-                for days in AllSundays(length):
+                if lastdata_instance.last_sunday_2:
+                    begining_day = lastdata_instance.last_sunday_2 + timedelta(days=1)
+                else:
+                    begining_day = jdatetime.datetime.now()
+                goal_num = len(list(AllSundays(length, begining_day)))
+                counter_1 = 0
+                for days in AllSundays(length, begining_day):
+                    counter_1 += 1
                     for i in range(x):
                         total_minutes = TotalMinutes(start_time) + i*TotalMinutes(duration)
                         hours = int(total_minutes/60)
                         minutes = total_minutes - (hours * 60)
                         time = str(hours)+':'+str(minutes)
-                        print(minutes)
+
                         session = SessionModel.objects.create(salon=salon_instance, duration=duration,
                                                     day = str(days), time = time)
                         session.save()
-            if saturdays:
-                for days in AllSaturdays(length):
-                    for i in range(x):
-                        total_minutes = TotalMinutes(start_time) + i*TotalMinutes(duration)
-                        hours = int(total_minutes/60)
-                        minutes = total_minutes - (hours * 60)
-                        time = str(hours)+':'+str(minutes)
-                        print(minutes)
-                        session = SessionModel.objects.create(salon=salon_instance, duration=duration,
-                                                    day = str(days), time = time)
-                        session.save()
+                    if counter_1 == goal_num:
+                        lastdata_instance.last_length = length
+                        lastdata_instance.last_sunday = days
+                        lastdata_instance.save()
+
             if mondays:
-                for days in AllMondays(length):
+                if lastdata_instance.last_monday_2:
+                    begining_day = lastdata_instance.last_monday_2 + timedelta(days=1)
+                else:
+                    begining_day = jdatetime.datetime.now()
+                goal_num = len(list(AllMondays(length, begining_day)))
+                counter_1 = 0
+                for days in AllMondays(length, begining_day):
+                    counter_1 += 1
                     for i in range(x):
                         total_minutes = TotalMinutes(start_time) + i*TotalMinutes(duration)
                         hours = int(total_minutes/60)
                         minutes = total_minutes - (hours * 60)
                         time = str(hours)+':'+str(minutes)
-                        print(minutes)
+
                         session = SessionModel.objects.create(salon=salon_instance, duration=duration,
                                                     day = str(days), time = time)
                         session.save()
+                    if counter_1 == goal_num:
+                        lastdata_instance.last_length = length
+                        lastdata_instance.last_monday = days
+                        lastdata_instance.save()
 
 
             if tuesdays:
-                for days in AllTuesdays(length):
+                if lastdata_instance.last_tuesday_2:
+                    begining_day = lastdata_instance.last_tuesday_2 + timedelta(days=1)
+                else:
+                    begining_day = jdatetime.datetime.now()
+                goal_num = len(list(AllTuesdays(length, begining_day)))
+                counter_1 = 0
+                for days in AllTuesdays(length, begining_day):
+                    counter_1 += 1
                     for i in range(x):
                         total_minutes = TotalMinutes(start_time) + i*TotalMinutes(duration)
                         hours = int(total_minutes/60)
                         minutes = total_minutes - (hours * 60)
                         time = str(hours)+':'+str(minutes)
-                        print(minutes)
+
                         session = SessionModel.objects.create(salon=salon_instance, duration=duration,
                                                     day = str(days), time = time)
                         session.save()
+                    if counter_1 == goal_num:
+                        lastdata_instance.last_length = length
+                        lastdata_instance.last_tuesday = days
+                        lastdata_instance.save()
             if wednesdays:
-                for days in AllWednesdays(length):
+                if lastdata_instance.last_wednesday_2:
+                    begining_day = lastdata_instance.last_wednesday_2 + timedelta(days=1)
+                else:
+                    begining_day = jdatetime.datetime.now()
+                goal_num = len(list(AllWednesdays(length, begining_day)))
+                counter_1 = 0
+                for days in AllWednesdays(length, begining_day):
+                    counter_1 += 1
                     for i in range(x):
                         total_minutes = TotalMinutes(start_time) + i*TotalMinutes(duration)
                         hours = int(total_minutes/60)
                         minutes = total_minutes - (hours * 60)
                         time = str(hours)+':'+str(minutes)
-                        print(minutes)
+
                         session = SessionModel.objects.create(salon=salon_instance, duration=duration,
                                                     day = str(days), time = time)
                         session.save()
+                    if counter_1 == goal_num:
+                        lastdata_instance.last_length = length
+                        lastdata_instance.last_wednesday = days
+                        lastdata_instance.save()
             if thursdays:
-                for days in AllThursdays(length):
+                if lastdata_instance.last_thursday_2:
+                    begining_day = lastdata_instance.last_thursday_2 + timedelta(days=1)
+                else:
+                    begining_day = jdatetime.datetime.now()
+                goal_num = len(list(AllThursdays(length, begining_day)))
+                counter_1 = 0
+                for days in AllThursdays(length, begining_day):
+                    counter_1 += 1
                     for i in range(x):
                         total_minutes = TotalMinutes(start_time) + i*TotalMinutes(duration)
                         hours = int(total_minutes/60)
                         minutes = total_minutes - (hours * 60)
                         time = str(hours)+':'+str(minutes)
-                        print(minutes)
+
                         session = SessionModel.objects.create(salon=salon_instance, duration=duration,
                                                     day = str(days), time = time)
                         session.save()
+                    if counter_1 == goal_num:
+                        lastdata_instance.last_length = length
+                        lastdata_instance.last_thursday = days
+                        lastdata_instance.save()
             if fridays:
-                for days in AllFridays(length):
+                if lastdata_instance.last_friday_2:
+                    begining_day = lastdata_instance.last_friday_2  + timedelta(days=1)
+                else:
+                    begining_day = jdatetime.datetime.now()
+                goal_num = len(list(AllFridays(length, begining_day)))
+                counter_1 = 0
+                for days in AllFridays(length, begining_day):
+                    counter_1 += 1
                     for i in range(x):
                         total_minutes = TotalMinutes(start_time) + i*TotalMinutes(duration)
                         hours = int(total_minutes/60)
                         minutes = total_minutes - (hours * 60)
                         time = str(hours)+':'+str(minutes)
-                        print(minutes)
+
                         session = SessionModel.objects.create(salon=salon_instance, duration=duration,
                                                     day = str(days), time = time)
                         session.save()
+                    if counter_1 == goal_num:
+                        lastdata_instance.last_length = length
+                        lastdata_instance.last_friday = days
+                        lastdata_instance.save()
             return HttpResponseRedirect(reverse('salon:salondetail',
-                                                kwargs={'pk':pk}))
+                                            kwargs={'pk':pk}))
+        else:
+            print(days_form.errors)
+            print(times_form.errors)
+            return HttpResponseRedirect(reverse('salon:salondetail',
+                                            kwargs={'pk':pk}))
     else:
         days_form = DaysForm()
         times_form = TimesForm()
         return render(request,'session/createsession.html',
                               {'days_form':days_form,
-                              'times_form':times_form})
+                              'times_form':times_form,
+                              'lastdata_instance':lastdata_instance,})
 
 
 @login_required

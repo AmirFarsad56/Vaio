@@ -2,7 +2,7 @@ from django import forms
 
 
 class DaysForm(forms.Form):
-    length = forms.IntegerField()
+    length = forms.IntegerField(required=False)
     saturdays = forms.BooleanField(required = False)
     sundays = forms.BooleanField(required = False)
     mondays = forms.BooleanField(required = False)

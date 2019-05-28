@@ -66,16 +66,6 @@ def SalonCreateView(request,slug):
                    'pending':pending})
 
 
-@method_decorator([login_required, sportclub_required], name='dispatch')
-class SalonUpdateView(UpdateView):
-    model = SalonModel
-    fields = '__all__'
-    template_name = 'salon/updatesalon.html'
-
-    def get_queryset(self):
-        return SalonModel.objects.filter(sportclub = self.request.user.sportclubs)
-
-
 @login_required
 @sportclub_required
 def SalonUpdateView(request,slug,pk):

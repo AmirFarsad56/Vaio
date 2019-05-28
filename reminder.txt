@@ -16,6 +16,7 @@ salons is_confirmed field must be set to False when sportclubs updates them
 salons must have a pending filed that when a masteruser told them to change your salon other masterusers
 doesn't see that salon in unpublished list
 
+restrict length to be chosen from dropdown menu
 
 url mapping for commonusers to see salon list
 

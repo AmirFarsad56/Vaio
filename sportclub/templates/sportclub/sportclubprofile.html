@@ -32,7 +32,7 @@
     </ul>
     Update Datas?<br>
     <a href="{% url 'salon:update' slug=user.slug pk=salon.pk %}"> Yes </a><br>
-    <a href="{% url 'salon:salondetail' slug=user.slug pk=salon.pk %}"> Details </a><br>
+    <a href="{% url 'salon:salondetail' pk=salon.pk %}"> Details </a><br>
     -------------------------------------------<br>
     {% endfor %}
     {% endif %}

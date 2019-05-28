@@ -26,3 +26,42 @@ class SessionModel(models.Model):
 '''
 199271Raiden
 '''
+
+class LastDataModel(models.Model):
+    salon = models.ForeignKey(SalonModel, on_delete = models.CASCADE,
+                              related_name = 'lastdatas', blank = False,
+                              null = False)
+    last_length = models.IntegerField(null = True, blank = True)
+    last_saturday = jmodels.jDateField(null = True, blank = True)
+    last_sunday = jmodels.jDateField(null = True, blank = True)
+    last_monday = jmodels.jDateField(null = True, blank = True)
+    last_tuesday = jmodels.jDateField(null = True, blank = True)
+    last_wednesday = jmodels.jDateField(null = True, blank = True)
+    last_thursday = jmodels.jDateField(null = True, blank = True)
+    last_friday = jmodels.jDateField(null = True, blank = True)
+    last_saturday_2 = jmodels.jDateField(null = True, blank = True)
+    last_sunday_2 = jmodels.jDateField(null = True, blank = True)
+    last_monday_2 = jmodels.jDateField(null = True, blank = True)
+    last_tuesday_2 = jmodels.jDateField(null = True, blank = True)
+    last_wednesday_2 = jmodels.jDateField(null = True, blank = True)
+    last_thursday_2 = jmodels.jDateField(null = True, blank = True)
+    last_friday_2 = jmodels.jDateField(null = True, blank = True)
+
+    def save(self, *args, **kwargs):
+        if self.last_saturday is not None and self.last_sunday is not None and self.last_monday is not None and self.last_tuesday is not None and self.last_wednesday is not None and self.last_thursday is not None and self.last_friday is not None:
+            self.last_length = None
+            self.last_saturday_2 = self.last_saturday
+            self.last_saturday = None
+            self.last_sunday_2 = self.last_sunday
+            self.last_sunday = None
+            self.last_monday_2 = self.last_monday
+            self.last_monday = None
+            self.last_tuesday_2 = self.last_tuesday
+            self.last_tuesday = None
+            self.last_wednesday_2 = self.last_wednesday
+            self.last_wednesday = None
+            self.last_thursday_2 = self.last_thursday
+            self.last_thursday = None
+            self.last_friday_2 = self.last_friday
+            self.last_friday = None
+        super(LastDataModel, self).save(*args, **kwargs)

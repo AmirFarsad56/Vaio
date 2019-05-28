@@ -7,8 +7,43 @@
   <body>
 
     <form id='days_form' method="POST">
-      {{days_form.as_p}}
-        {{times_form.as_p}}
+      {% if lastdata_instance.last_length %}
+      <p>create sessions for the length of {{lastdata_instance.last_length}} months</p>
+      {% else %}
+      <p>length: {{days_form.length}}</p>
+      {% endif %}
+
+
+      {% if lastdata_instance.last_saturday == null %}
+      <p>saturdays: {{days_form.saturdays}}</p>
+      {% endif %}
+
+      {% if lastdata_instance.last_sunday == null %}
+      <p>sundays: {{days_form.sundays}}</p>
+      {% endif %}
+
+      {% if lastdata_instance.last_monday == null %}
+      <p>mondays: {{days_form.mondays}}</p>
+      {% endif %}
+
+      {% if lastdata_instance.last_tuesday == null %}
+      <p>tuesdays: {{days_form.tuesdays}}</p>
+      {% endif %}
+
+      {% if lastdata_instance.last_wednesday == null %}
+      <p>wednesdays: {{days_form.wednesdays}}</p>
+      {% endif %}
+
+      {% if lastdata_instance.last_thursday == null %}
+      <p>thursdays: {{days_form.thursdays}}</p>
+      {% endif %}
+
+
+      {% if lastdata_instance.last_friday == null %}
+      <p>fridays: {{days_form.fridays}}</p>
+      {% endif %}
+
+      {{times_form.as_p}}
       {% csrf_token %}
     <input type='submit' name='days_form' value='Form 1' />
 </form>
