@@ -8,9 +8,15 @@
 
     <form id='days_form' method="POST">
       {% if lastdata_instance.last_length %}
-      <p>create sessions for the length of {{lastdata_instance.last_length}} months</p>
+      <p>create sessions for the length of {{lastdata_instance.last_length}} +  1 days
+       between {{lastdata_instance.first_day}} and {{lastdata_instance.last_day}}</p>
       {% else %}
-      <p>length: {{days_form.length}}</p>
+      {% if lastdata_instance.first_day_2 %}
+      <p>first day of the range is {{lastdata_instance.first_day_2}}</p>
+      {% else %}
+      <p>first day of the range is today</p>
+      {% endif %}
+      <p>enter the end of the range of making sessions: {{days_form.last_day}}</p>
       {% endif %}
 
 

@@ -2,7 +2,7 @@ from django import forms
 
 
 class DaysForm(forms.Form):
-    length = forms.IntegerField(required=False)
+    last_day = forms.DateField(required=False, widget=forms.DateInput(format='%Y-%m-%d'))
     saturdays = forms.BooleanField(required = False)
     sundays = forms.BooleanField(required = False)
     mondays = forms.BooleanField(required = False)

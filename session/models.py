@@ -3,6 +3,7 @@ from django_jalali.db import models as jmodels
 from salon.models import SalonModel
 from django.utils.text import slugify
 from django.conf import settings
+from jdatetime import timedelta
 
 class SessionModel(models.Model):
     salon = models.ForeignKey(SalonModel, on_delete = models.CASCADE,
@@ -32,6 +33,9 @@ class LastDataModel(models.Model):
                               related_name = 'lastdatas', blank = False,
                               null = False)
     last_length = models.IntegerField(null = True, blank = True)
+    first_day = jmodels.jDateField(null = True, blank = True)
+    first_day_2 = jmodels.jDateField(null = True, blank = True)
+    last_day = jmodels.jDateField(null = True, blank = True)
     last_saturday = jmodels.jDateField(null = True, blank = True)
     last_sunday = jmodels.jDateField(null = True, blank = True)
     last_monday = jmodels.jDateField(null = True, blank = True)
@@ -49,6 +53,9 @@ class LastDataModel(models.Model):
 
     def save(self, *args, **kwargs):
         if self.last_saturday is not None and self.last_sunday is not None and self.last_monday is not None and self.last_tuesday is not None and self.last_wednesday is not None and self.last_thursday is not None and self.last_friday is not None:
+            self.first_day_2 = self.last_day + timedelta(days = 1)
+            self.first_day = None
+            self.last_day = None
             self.last_length = None
             self.last_saturday_2 = self.last_saturday
             self.last_saturday = None

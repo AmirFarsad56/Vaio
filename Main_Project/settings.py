@@ -150,7 +150,7 @@ MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
-
+DATE_INPUT_FORMAT = ['%Y-%m-%d']
 #sms service
 sms_sender_number = '100065995'
 

@@ -9,4 +9,4 @@ Modules
 	pillow
 		pip install pillow
 		pip install django_jalali
-		pip install
+		pip install jdatetime

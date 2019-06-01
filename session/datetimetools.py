@@ -10,20 +10,11 @@ def AllSaturdays(length, start_time = jdatetime.datetime.now()):
    current_month = start_time.month
    if 0 - today.weekday() >= 0:
        yield dates
-   if current_month + length > 12:
-       new_month = current_month + length - 12
-       try:
-           f = date(start_time.year+1, new_month, start_time.day)
-       except:
-           f = date(start_time.year+1, new_month+1, 1)
-   else:
-       try:
-           f = date(start_time.year, start_time.month+length, start_time.day)
-       except:
-           if start_time.month+length == 11:
-               f = date(start_time.year+1, 1, 1)
-           else:
-               f = date(start_time.year, start_time.month+length+1, 1)
+   f = start_time + timedelta(days = length)
+   try:
+       f = f.date()
+   except:
+       f = f
    while dates <= f:
       dates += timedelta(days = 7)
       if dates <= f:
@@ -37,20 +28,11 @@ def AllSundays(length, start_time = jdatetime.datetime.now()):
    current_month = start_time.month
    if 1 - today.weekday() >= 0:
        yield dates
-   if current_month + length > 12:
-       new_month = current_month + length - 12
-       try:
-           f = date(start_time.year+1, new_month, start_time.day)
-       except:
-           f = date(start_time.year+1, new_month+1, 1)
-   else:
-       try:
-           f = date(start_time.year, start_time.month+length, start_time.day)
-       except:
-           if start_time.month+length == 11:
-               f = date(start_time.year+1, 1, 1)
-           else:
-               f = date(start_time.year, start_time.month+length+1, 1)
+   f = start_time + timedelta(days = length)
+   try:
+       f = f.date()
+   except:
+       f = f
    while dates <= f:
       dates += timedelta(days = 7)
       if dates <= f:
@@ -64,20 +46,11 @@ def AllMondays(length, start_time = jdatetime.datetime.now()):
    current_month = start_time.month
    if 2 - today.weekday() >= 0:
        yield dates
-   if current_month + length > 12:
-       new_month = current_month + length - 12
-       try:
-           f = date(start_time.year+1, new_month, start_time.day)
-       except:
-           f = date(start_time.year+1, new_month+1, 1)
-   else:
-       try:
-           f = date(start_time.year, start_time.month+length, start_time.day)
-       except:
-           if start_time.month+length == 11:
-               f = date(start_time.year+1, 1, 1)
-           else:
-               f = date(start_time.year, start_time.month+length+1, 1)
+   f = start_time + timedelta(days = length)
+   try:
+       f = f.date()
+   except:
+       f = f
    while dates <= f:
       dates += timedelta(days = 7)
       if dates <= f:
@@ -91,20 +64,11 @@ def AllTuesdays(length, start_time = jdatetime.datetime.now()):
    current_month = start_time.month
    if 3 - today.weekday() >= 0:
        yield dates
-   if current_month + length > 12:
-       new_month = current_month + length - 12
-       try:
-           f = date(start_time.year+1, new_month, start_time.day)
-       except:
-           f = date(start_time.year+1, new_month+1, 1)
-   else:
-       try:
-           f = date(start_time.year, start_time.month+length, start_time.day)
-       except:
-           if start_time.month+length == 11:
-               f = date(start_time.year+1, 1, 1)
-           else:
-               f = date(start_time.year, start_time.month+length+1, 1)
+   f = start_time + timedelta(days = length)
+   try:
+       f = f.date()
+   except:
+       f = f
    while dates <= f:
       dates += timedelta(days = 7)
       if dates <= f:
@@ -118,20 +82,11 @@ def AllWednesdays(length, start_time = jdatetime.datetime.now()):
    current_month = start_time.month
    if 4 - today.weekday() >= 0:
        yield dates
-   if current_month + length > 12:
-       new_month = current_month + length - 12
-       try:
-           f = date(start_time.year+1, new_month, start_time.day)
-       except:
-           f = date(start_time.year+1, new_month+1, 1)
-   else:
-       try:
-           f = date(start_time.year, start_time.month+length, start_time.day)
-       except:
-           if start_time.month+length == 11:
-               f = date(start_time.year+1, 1, 1)
-           else:
-               f = date(start_time.year, start_time.month+length+1, 1)
+   f = start_time + timedelta(days = length)
+   try:
+       f = f.date()
+   except:
+       f = f
    while dates <= f:
       dates += timedelta(days = 7)
       if dates <= f:
@@ -145,20 +100,11 @@ def AllThursdays(length, start_time = jdatetime.datetime.now()):
    current_month = start_time.month
    if 5 - today.weekday() >= 0:
        yield dates
-   if current_month + length > 12:
-       new_month = current_month + length - 12
-       try:
-           f = date(start_time.year+1, new_month, start_time.day)
-       except:
-           f = date(start_time.year+1, new_month+1, 1)
-   else:
-       try:
-           f = date(start_time.year, start_time.month+length, start_time.day)
-       except:
-           if start_time.month+length == 11:
-               f = date(start_time.year+1, 1, 1)
-           else:
-               f = date(start_time.year, start_time.month+length+1, 1)
+   f = start_time + timedelta(days = length)
+   try:
+       f = f.date()
+   except:
+       f = f
    while dates <= f:
       dates += timedelta(days = 7)
       if dates <= f:
@@ -172,20 +118,11 @@ def AllFridays(length, start_time = jdatetime.datetime.now()):
    current_month = start_time.month
    if 6 - today.weekday() >= 0:
        yield dates
-   if current_month + length > 12:
-       new_month = current_month + length - 12
-       try:
-           f = date(start_time.year+1, new_month, start_time.day)
-       except:
-           f = date(start_time.year+1, new_month+1, 1)
-   else:
-       try:
-           f = date(start_time.year, start_time.month+length, start_time.day)
-       except:
-           if start_time.month+length == 11:
-               f = date(start_time.year+1, 1, 1)
-           else:
-               f = date(start_time.year, start_time.month+length+1, 1)
+   f = start_time + timedelta(days = length)
+   try:
+       f = f.date()
+   except:
+       f = f
    while dates <= f:
       dates += timedelta(days = 7)
       if dates <= f:
@@ -195,3 +132,15 @@ def AllFridays(length, start_time = jdatetime.datetime.now()):
 def TotalMinutes(time):
     total_minutes = (time.hour * 60) + time.minute
     return total_minutes
+
+
+#string to date
+from jdatetime import datetime as x
+print(x.strptime('1398-6-31','%Y-%m-%d'))
+
+
+for day in AllThursdays(1):
+    if day < jdatetime.datetime.now().date():
+        print(day)
+    else:
+        print('sdasd')
