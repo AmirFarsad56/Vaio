@@ -77,7 +77,7 @@ if user is not None:
 --------------------------------------------------------------------------------------
 updating datas via Functions
 def func(request, id):
-    object = Model.objects.get(id=id)
+    object = Model.objects.get(id=id) # or with get_object_or_404
     form = ModelForm(instance=object)
 
     return render(request, 'my_template.html', {'form':form})

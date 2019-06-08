@@ -20,10 +20,6 @@ class SessionModel(models.Model):
 
 
 
-    def save(self, *args, **kwargs):
-        if self.price:
-            self.is_ready = True
-        super(SessionModel, self).save(*args, **kwargs)
 '''
 199271Raiden
 '''
